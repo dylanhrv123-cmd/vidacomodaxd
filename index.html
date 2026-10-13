@@ -300,6 +300,21 @@
   .factions { display: flex; gap: 8px; flex-wrap: wrap; }
   .factions button { font-size: 13px; padding: 6px 12px; }
 
+  /* Amigos: alineación fija de tarjetas, botones y campo de búsqueda */
+  #friends .flist { max-width: 720px; }
+  #friends .fcard { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 14px; }
+  #friends .factions { justify-content: flex-end; flex-wrap: nowrap; }
+  #friends .factions button { white-space: nowrap; height: 34px; padding: 0 14px; }
+  #friends .goal-add { align-items: stretch; }
+  #friends .goal-add input, #friends .goal-add button { height: 42px; }
+  #friends .goal-add button { white-space: nowrap; padding: 0 18px; }
+  #friends .sub { margin: 0 0 22px; }
+  #friends .fcard + .fcard { margin-top: 0; }
+  @media (max-width: 760px) {
+    #friends .fcard { grid-template-columns: 46px minmax(0, 1fr); }
+    #friends .factions { grid-column: 1 / -1; justify-content: flex-start; }
+  }
+
   /* Código de amigo */
   .codecard { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
   .codeval { display: flex; gap: 10px; align-items: center; font-weight: 700; font-size: 18px; letter-spacing: .1em; }
