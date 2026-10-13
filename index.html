@@ -315,6 +315,14 @@
     #friends .factions { grid-column: 1 / -1; justify-content: flex-start; }
   }
 
+  /* Perfil de amigo: que todo quepa dentro del panel */
+  #fDetail { max-width: 720px; box-sizing: border-box; display: grid; gap: 14px; }
+  #fDetail > * { min-width: 0; max-width: 100%; box-sizing: border-box; }
+  #fDetail .fcard { grid-template-columns: 46px minmax(0, 1fr); }
+  #fDetail .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: none; margin: 0; }
+  #fDetail .stat { min-width: 0; }
+  #fDetail > button { width: 100%; margin: 0; }
+
   /* Código de amigo */
   .codecard { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
   .codeval { display: flex; gap: 10px; align-items: center; font-weight: 700; font-size: 18px; letter-spacing: .1em; }
