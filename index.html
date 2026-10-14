@@ -458,12 +458,136 @@
     .cal .day { min-height: 70px; }
     .cal .ev { font-size: 10px; }
   }
+
+  /* Menú de inicio en celular (solo pantallas de 600 px o menos) */
+  .m-top, .m-gear, .m-prof, .m-prof-home { display: none; }
+  .lbl-back { display: none; }
+  .m-row { display: contents; }
+  .m-hello { display: none; }
+  .m-back { display: none; margin-bottom: 14px; }
+  @media (max-width: 600px) {
+    .m-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .m-back, .m-gear { display: inline-flex; align-items: center; }
+    .m-back { margin: 0; }
+    .m-prof { background: var(--panel); border: 1px solid var(--line); padding: 8px 14px; border-radius: 999px; }
+    .m-right { display: flex; gap: 8px; }
+    .m-prof { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; height: 38px; }
+    .m-av { width: 30px; height: 30px; border-radius: 50%; background: var(--pc); color: #0b0b0c; display: grid;
+      place-items: center; font-weight: 700; font-size: 12px; overflow: hidden; flex-shrink: 0; }
+    .m-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .m-nm { max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+    .m-nm:empty { display: none; }
+    .hw { gap: 6px 4px; padding: 10px 6px; }
+    .hw-h { height: 40px; line-height: 1.2; font-size: 12px; white-space: pre-line; text-align: center; justify-content: center; }
+    .hw-c { min-height: 30px; }
+    .hw-name { font-size: 13px; }
+    .days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+    .days .chip { padding: 8px 0; font-size: 12px; text-align: center; min-width: 0; }
+    #friends .goal-add input { height: 46px; padding: 0 14px; line-height: 46px; }
+    #friends .goal-add button { height: 46px; }
+
+    body.m-home .m-hello { display: block; margin: 4px 0 20px; animation: menuIn .5s ease .05s both; }
+    .m-date { font-size: 13px; color: var(--pc); font-weight: 600; text-transform: capitalize; letter-spacing: .04em; }
+    .m-greet {
+      font-size: 28px; font-weight: 700; line-height: 1.15; margin: 4px 0 6px; letter-spacing: -.02em;
+      background: linear-gradient(90deg, var(--h1a) 30%, var(--pc)); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .m-motto { color: var(--muted); font-style: italic; font-size: 14px; margin: 0 0 12px; }
+    .m-motto:empty { display: none; }
+    .m-sum { display: inline-block; font-size: 12px; color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; background: var(--panel); }
+    body.m-home .brand { margin-bottom: 4px; }
+
+    /* Animaciones del menú de inicio */
+    @keyframes menuIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    body.m-home .brand { animation: menuIn .4s ease both; }
+    body.m-home .nav button, body.m-home .m-row button, body.m-home .sfoot .logout {
+      animation: menuIn .45s cubic-bezier(.2,.7,.2,1) both;
+      transition: transform .15s ease, background .2s, border-color .2s;
+    }
+    body.m-home .nav button:nth-child(1) { animation-delay: .05s; }
+    body.m-home .nav button:nth-child(2) { animation-delay: .1s; }
+    body.m-home .nav button:nth-child(3) { animation-delay: .15s; }
+    body.m-home .nav button:nth-child(4) { animation-delay: .2s; }
+    body.m-home .nav button:nth-child(5) { animation-delay: .25s; }
+    body.m-home .nav button:nth-child(6) { animation-delay: .3s; }
+    body.m-home .nav button:nth-child(7) { animation-delay: .35s; }
+    body.m-home .nav button:nth-child(8) { animation-delay: .4s; }
+    body.m-home .m-row { animation: none; }
+    body.m-home .m-row button:nth-child(1) { animation-delay: .45s; }
+    body.m-home .m-row button:nth-child(2) { animation-delay: .5s; }
+    body.m-home .sfoot .logout { animation-delay: .55s; }
+    body.m-home .nav button:active, body.m-home .m-row button:active, body.m-home .sfoot .logout:active {
+      transform: scale(.97);
+    }
+    body.m-home .nav button.active { border-color: var(--pc); }
+    @media (prefers-reduced-motion: reduce) {
+      body.m-home .brand, body.m-home .nav button, body.m-home .m-row button, body.m-home .sfoot .logout { animation: none; }
+    }
+    .m-right button { padding: 8px 13px; font-size: 14px; }
+    body.m-home .m-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    body.m-home .m-row button { justify-content: center; text-align: center; padding: 12px 10px; font-size: 15px; }
+    body.m-home .sfoot { margin-top: 16px; }
+    body.m-home .sfoot .logout { margin-top: 10px; }
+    body:not(.m-home) .hello { margin: 0 0 6px; }
+    body:not(.m-home) main h1 { margin: 2px 0 10px; line-height: 1.1; }
+    body:not(.m-home) .sub { margin: 0 0 20px; line-height: 1.45; }
+    body:not(.m-home) .toolbar { margin-bottom: 18px; gap: 8px; }
+    body:not(.m-home) .m-top { margin-bottom: 22px; }
+    .pbubble { display: none; }
+    body:has(#settings.active) .m-gear { display: none; }
+    body:has(#profile.active) .m-prof { display: none; }
+    body:has(#settings.active) .lbl-menu,
+    body:has(#profile.active) .lbl-menu { display: none; }
+    body:has(#settings.active) .lbl-back,
+    body:has(#profile.active) .lbl-back { display: inline; }
+    body.m-home .m-prof-home {
+      display: flex; align-items: center; width: 100%; padding: 11px 14px; font-size: 15px; text-align: left;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 14px; color: var(--text);
+    }
+    .m-gear { background: var(--panel); color: var(--text); border: 1px solid var(--line); padding: 0 14px; height: 38px; border-radius: 999px; font-size: 14px; }
+    .m-back { height: 38px; padding: 0 14px; border-radius: 999px; font-size: 14px; }
+    body:not(.m-home) .hello { color: var(--pc); font-weight: 600; }
+    body:not(.m-home) .sub { color: var(--text); opacity: .75; }
+    body:not(.m-home) main h1 { font-size: 30px; line-height: 1.2; }
+    body.m-home .app { grid-template-columns: 1fr; }
+    body.m-home main { display: none; }
+    body.m-home aside {
+      border-right: none; border-bottom: none; flex-direction: column; overflow: visible;
+      min-height: 100%; padding: 20px 16px 110px; gap: 6px;
+    }
+    body.m-home .brand { display: block; margin: 0 0 12px; font-size: 12px; }
+    body.m-home .nav { display: flex; flex-direction: column; gap: 6px; }
+    body.m-home .nav button {
+      width: 100%; padding: 11px 14px; font-size: 15px; text-align: left; white-space: normal;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 14px; color: var(--text);
+    }
+    body.m-home .nav button.active { box-shadow: none; }
+    body.m-home .sfoot { margin-top: 14px; gap: 6px; }
+    body.m-home .sfoot button {
+      width: 100%; padding: 11px 14px; font-size: 15px; text-align: left; border-radius: 14px;
+      background: var(--panel); border: 1px solid var(--line); color: var(--text);
+    }
+    body.m-home .sfoot .gear { background: var(--panel); border: 1px solid var(--line); color: var(--text); }
+    body.m-home .sfoot .logout {
+      margin-top: 18px; background: none; border: 1px dashed #5a2a2a; color: #ff8a8a; text-align: center;
+    }
+    :root.light body.m-home .sfoot .logout { color: #d9534f; border-color: #e0b4b4; }
+    body:not(.m-home) aside { display: none; }
+    body:not(.m-home) main { display: block; }
+    .pbubble { top: 14px; right: 14px; }
+  }
 </style>
 </head>
-<body>
+<body class="m-home">
 <div class="app">
   <aside>
     <div class="brand">Mi organización</div>
+    <div class="m-hello">
+      <div class="m-date" id="mDate"></div>
+      <div class="m-greet" id="mGreet"></div>
+      <p class="m-motto" id="mMotto"></p>
+      <span class="m-sum" id="mSum"></span>
+    </div>
     <nav class="nav">
       <button class="active" data-view="today">Hoy</button>
       <button data-view="calendar">Calendario</button>
@@ -475,12 +599,17 @@
       <button data-view="assistant">Asistente</button>
     </nav>
     <div class="sfoot">
-      <button class="gear" id="openSettings">⚙ Configuración</button>
+      <div class="m-row">
+        <button class="m-prof-home" id="mProfHome">👤 Perfil</button>
+        <button class="gear" id="openSettings">⚙ Configuración</button>
+      </div>
       <button class="logout" id="logoutBtn">Cerrar sesión</button>
     </div>
   </aside>
 
   <main>
+    <div class="m-top"><button class="m-back" id="mBack"><span class="lbl-menu">← Menú</span><span class="lbl-back">← Volver</span></button><div class="m-right"><button class="m-gear" id="mGear">⚙ Ajustes</button><button class="m-prof" id="mProf"><span class="m-av" id="mAv"></span><span class="m-nm" id="mNm"></span></button></div></div>
+
     <!-- HOY -->
     <section class="view active" id="today">
       <div class="hello" id="todayDate"></div>
@@ -877,6 +1006,7 @@
   const views = document.querySelectorAll(".view");
   document.querySelectorAll(".nav button").forEach(btn => {
     btn.addEventListener("click", () => {
+      document.body.classList.remove("m-home");
       document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b === btn));
       views.forEach(v => v.classList.toggle("active", v.id === btn.dataset.view));
       if (btn.dataset.view === "today") renderToday();
@@ -1649,6 +1779,12 @@
     });
     if (!tl.children.length) tl.innerHTML = '<p class="sub">Sin tareas para hoy.</p>';
     applyRoleOrder();
+
+    // Saludo del menú de inicio en celular
+    document.getElementById("mDate").textContent = now.toLocaleDateString(localeTag(), { weekday: "long", day: "numeric", month: "long" });
+    document.getElementById("mGreet").textContent = greet + (profile.name ? ", " + profile.name : "") + ".";
+    document.getElementById("mMotto").textContent = profile.motto || "";
+    document.getElementById("mSum").textContent = document.getElementById("progressText").textContent;
   }
 
   // ---------- Scroll más suave con la rueda ----------
@@ -1784,6 +1920,7 @@
   };
   const remPicker = timePicker(document.getElementById("remTimeBox"));
   document.getElementById("openSettings").onclick = () => {
+    document.body.classList.remove("m-home");
     document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
     views.forEach(v => v.classList.toggle("active", v.id === "settings"));
   };
@@ -1791,6 +1928,7 @@
 
   // ---------- Búsqueda, exportación, recordatorio y hábitos por semana ----------
   function goView(v) {
+    document.body.classList.remove("m-home");
     document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.view === v));
     views.forEach(x => x.classList.toggle("active", x.id === v));
     if (v === "today") renderToday();
@@ -1879,7 +2017,7 @@
     grid.className = "hw";
     grid.style.gridTemplateColumns = "minmax(110px, 1.4fr) repeat(7, minmax(34px, 1fr))";
     grid.appendChild(cellDiv("hw-h", ""));
-    days.forEach(d => grid.appendChild(cellDiv("hw-h" + (iso(d) === todayKey ? " today" : ""), DOW_T()[(d.getDay() + 6) % 7] + " " + d.getDate())));
+    days.forEach(d => grid.appendChild(cellDiv("hw-h" + (iso(d) === todayKey ? " today" : ""), DOW_T()[(d.getDay() + 6) % 7] + "\n" + d.getDate())));
     data.habits.forEach(h => {
       grid.appendChild(cellDiv("hw-name", h.title));
       days.forEach(d => {
@@ -2505,8 +2643,11 @@
       av.textContent = initials(name) || "🙂";
     }
     document.getElementById("pBubble").classList.toggle("named", !!name);
+    document.getElementById("mAv").innerHTML = av.innerHTML;
+    document.getElementById("mNm").textContent = name;
   }
   document.getElementById("pBubble").onclick = () => {
+    document.body.classList.remove("m-home");
     document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
     views.forEach(v => v.classList.toggle("active", v.id === "profile"));
     renderProfileExtras();
@@ -2865,6 +3006,50 @@
   renderSwatches();
   updatePreview();
 
+  // Ajustes en celular: recuerda desde qué sección se abrió para regresar a ella
+  let returnView = null;
+  // Guarda la sección de origen, salvo cuando se viene de Ajustes o Perfil (así no se pierde)
+  function rememberFrom(from) {
+    if (from === "settings" || from === "profile") return;
+    returnView = from;
+  }
+  function showSettingsScreen(from) {
+    rememberFrom(from);
+    document.body.classList.remove("m-home");
+    document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
+    views.forEach(v => v.classList.toggle("active", v.id === "settings"));
+  }
+  document.getElementById("openSettings").onclick = () => showSettingsScreen(null);
+  document.getElementById("mGear").onclick = () => {
+    const cur = document.querySelector(".view.active");
+    showSettingsScreen(cur ? cur.id : null);
+  };
+  document.getElementById("mBack").onclick = () => {
+    const inSub = document.querySelector("#settings.active, #profile.active");
+    if (inSub && returnView) {
+      views.forEach(v => v.classList.toggle("active", v.id === returnView));
+      document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.view === returnView));
+      if (returnView === "today") renderToday();
+      if (returnView === "habits") renderHabitWeek();
+      if (returnView === "friends") loadFriends();
+      if (returnView === "calendar") renderCalendar();
+    } else {
+      document.body.classList.add("m-home");
+    }
+    returnView = null;
+  };
+  function showProfileScreen(from) {
+    rememberFrom(from);
+    document.body.classList.remove("m-home");
+    document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
+    views.forEach(v => v.classList.toggle("active", v.id === "profile"));
+    renderProfileExtras();
+  }
+  document.getElementById("mProf").onclick = () => {
+    const cur = document.querySelector(".view.active");
+    showProfileScreen(cur ? cur.id : null);
+  };
+  document.getElementById("mProfHome").onclick = () => showProfileScreen(null);
   boot();
 })();
 </script>
