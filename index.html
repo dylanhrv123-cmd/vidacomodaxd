@@ -1336,11 +1336,14 @@
     const repeat = document.getElementById("evRepeat").value;
     const series = repeat === "none" ? "" : uid();
     const [by, bm, bd] = date.split("-").map(Number);
-    // Cada año: 10 años. Cada mes: 2 años. Los días que no existen (ej. 31 en meses cortos) se omiten.
+    // Cada año: 10 años. Cada mes: 2 años. Si el mes no tiene ese día (ej. 31 o 29 de febrero),
+    // se usa el último día que sí existe en ese mes.
     const count = repeat === "year" ? 10 : repeat === "month" ? 24 : 1;
     for (let i = 0; i < count; i++) {
-      const d = repeat === "year" ? new Date(by + i, bm - 1, bd) : new Date(by, bm - 1 + i, bd);
-      if (repeat !== "none" && d.getDate() !== bd) continue;
+      const y = repeat === "year" ? by + i : by;
+      const m0 = repeat === "year" ? bm - 1 : bm - 1 + i;
+      const lastDay = new Date(y, m0 + 1, 0).getDate();
+      const d = new Date(y, m0, Math.min(bd, lastDay));
       data.events.push({ id: uid(), title, date: iso(d), time, color, series, repeat });
     }
     save(); modal.classList.remove("open"); renderCalendar();
@@ -3106,8 +3109,13 @@
     else if (s.ov === "home") goMenu();
     else {
       askConfirm("¿Seguro que quieres salir de la página?", "Salir").then(ok => {
-        if (ok) history.back();
-        else history.pushState({ ov: "home" }, "");
+        if (ok) {
+          history.back();
+          // Si no había página anterior en esta pestaña, se sale igualmente
+          setTimeout(() => location.replace("about:blank"), 300);
+        } else {
+          history.pushState({ ov: "home" }, "");
+        }
       });
     }
   });
