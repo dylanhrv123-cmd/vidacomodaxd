@@ -996,6 +996,37 @@
       setTimeout(() => t.remove(), 300);
     }, 2800);
   }
+  // Para eventos repetidos: pregunta si borrar solo este día o toda la serie
+  function askDelete(ev) {
+    return new Promise(resolve => {
+      const wrap = document.createElement("div");
+      wrap.className = "modal open";
+      wrap.innerHTML = '<div class="box cbox"><p class="cmsg"></p>' +
+        '<div class="cbtns" style="flex-wrap:wrap"><button class="cancel">Cancelar</button>' +
+        '<button class="one">Solo este día</button><button class="primary danger all">Toda la serie</button></div></div>';
+      wrap.querySelector(".cmsg").textContent = '"' + ev.title + '" se repite. ¿Qué quieres eliminar?';
+      const done = val => { wrap.remove(); resolve(val); };
+      wrap.querySelector(".cancel").onclick = () => done(null);
+      wrap.querySelector(".one").onclick = () => done("uno");
+      wrap.querySelector(".all").onclick = () => done("serie");
+      wrap.addEventListener("click", e => { if (e.target === wrap) done(null); });
+      document.body.appendChild(wrap);
+    });
+  }
+  // Borra un evento; si se repite, pregunta primero
+  async function deleteEvent(e) {
+    if (!e.series) {
+      if (!(await askConfirm('¿Eliminar "' + e.title + '"?'))) return;
+      data.events = data.events.filter(x => x.id !== e.id);
+    } else {
+      const choice = await askDelete(e);
+      if (!choice) return;
+      data.events = choice === "serie"
+        ? data.events.filter(x => x.series !== e.series)
+        : data.events.filter(x => x.id !== e.id);
+    }
+    save(); renderCalendar();
+  }
   function askConfirm(message, okText) {
     return new Promise(resolve => {
       const wrap = document.createElement("div");
@@ -1091,12 +1122,7 @@
         c.style.setProperty("--c", e.color);
         c.textContent = e.title;
         c.title = "Clic para eliminar";
-        c.onclick = async ev => {
-          ev.stopPropagation();
-          if (await askConfirm('¿Eliminar "' + e.title + '"?')) {
-            data.events = data.events.filter(x => x.id !== e.id); save(); renderCalendar();
-          }
-        };
+        c.onclick = ev => { ev.stopPropagation(); deleteEvent(e); };
         all.appendChild(c);
       });
       data.tasks.filter(t => t.date === key && !t.done).forEach(t => {
@@ -1167,12 +1193,7 @@
         b.querySelector(".t").textContent = e.time;
         b.querySelector(".n").textContent = e.title;
         b.title = "Clic para eliminar";
-        b.onclick = async ev => {
-          ev.stopPropagation();
-          if (await askConfirm('¿Eliminar "' + e.title + '"?')) {
-            data.events = data.events.filter(x => x.id !== e.id); save(); renderCalendar();
-          }
-        };
+        b.onclick = ev => { ev.stopPropagation(); deleteEvent(e); };
         col.appendChild(b);
       });
 
@@ -1254,10 +1275,7 @@
         ev.style.background = e.color;
         ev.textContent = (e.time ? e.time + " " : "") + e.title;
         ev.title = "Clic para eliminar";
-        ev.addEventListener("click", async ex => {
-          ex.stopPropagation();
-          if (await askConfirm(`¿Eliminar "${e.title}"?`)) { data.events = data.events.filter(x => x.id !== e.id); save(); renderCalendar(); }
-        });
+        ev.addEventListener("click", ex => { ex.stopPropagation(); deleteEvent(e); });
         cell.appendChild(ev);
       });
 
@@ -2441,6 +2459,7 @@
     "⚙ Configuración": "⚙ Settings",
     "⚙ Configuración ": "⚙ Settings ",
 
+    "Solo este día": "Only this day", "Toda la serie": "Whole series",
     "Hoy": "Today", "Calendario": "Calendar", "Hábitos": "Habits", "Tareas": "Tasks", "Notas": "Notes",
     "Buscar": "Search", "Amigos": "Friends", "Asistente": "Assistant", "Perfil": "Profile",
     "Configuración": "Settings", "Cerrar sesión": "Log out", "Mi organización": "My organization",
