@@ -572,6 +572,12 @@
       margin-top: 18px; background: none; border: 1px dashed #5a2a2a; color: #ff8a8a; text-align: center;
     }
     :root.light body.m-home .sfoot .logout { color: #d9534f; border-color: #e0b4b4; }
+    body.m-home, body.m-home .app { height: auto; min-height: 100%; }
+    body.m-home aside { height: auto; min-height: 100vh; }
+    body.m-home .sfoot .logout {
+      display: block; width: 100%; box-sizing: border-box; padding: 13px 14px; margin-top: 12px;
+      white-space: normal; line-height: 1.3; background: rgba(255,138,138,.08); border: 1px solid #5a2a2a;
+    }
     body:not(.m-home) aside { display: none; }
     body:not(.m-home) main { display: block; }
     .pbubble { top: 14px; right: 14px; }
@@ -912,6 +918,11 @@
     <input id="evTitle" placeholder="Título">
     <input id="evDate" type="date">
     <div class="fld">Hora (opcional)<div class="tpick" id="evTimeBox"></div></div>
+    <select id="evRepeat">
+      <option value="none">No se repite</option>
+      <option value="month">Cada mes (mismo día)</option>
+      <option value="year">Cada año (mismo día)</option>
+    </select>
     <select id="evColor">
       <option value="#c9b8ff">Trabajo</option>
       <option value="#a8e6cf">Salud</option>
@@ -1309,6 +1320,7 @@
     document.getElementById("evTitle").value = "";
     document.getElementById("evDate").value = dateKey || iso(new Date());
     evTime.reset();
+    document.getElementById("evRepeat").value = "none";
     modal.classList.add("open");
     document.getElementById("evTitle").focus();
   }
@@ -1320,11 +1332,17 @@
     const time = evTime.get();
     if (!title || !date) return;
     if (time === null) { toast("Si pones una hora, elige también los minutos (y al revés)."); return; }
-    data.events.push({
-      id: uid(), title, date,
-      time,
-      color: document.getElementById("evColor").value
-    });
+    const color = document.getElementById("evColor").value;
+    const repeat = document.getElementById("evRepeat").value;
+    const series = repeat === "none" ? "" : uid();
+    const [by, bm, bd] = date.split("-").map(Number);
+    // Cada año: 10 años. Cada mes: 2 años. Los días que no existen (ej. 31 en meses cortos) se omiten.
+    const count = repeat === "year" ? 10 : repeat === "month" ? 24 : 1;
+    for (let i = 0; i < count; i++) {
+      const d = repeat === "year" ? new Date(by + i, bm - 1, bd) : new Date(by, bm - 1 + i, bd);
+      if (repeat !== "none" && d.getDate() !== bd) continue;
+      data.events.push({ id: uid(), title, date: iso(d), time, color, series, repeat });
+    }
     save(); modal.classList.remove("open"); renderCalendar();
   };
 
@@ -3051,6 +3069,48 @@
   };
   document.getElementById("mProfHome").onclick = () => showProfileScreen(null);
   boot();
+
+  // ---------- Celular: regreso dentro de la app y confirmación al salir ----------
+  const isMobile = () => window.matchMedia("(max-width: 600px)").matches;
+  function goScreen(id, push) {
+    document.body.classList.remove("m-home");
+    document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.view === id));
+    views.forEach(v => v.classList.toggle("active", v.id === id));
+    if (id === "today") renderToday();
+    if (id === "habits") renderHabitWeek();
+    if (id === "friends") loadFriends();
+    if (id === "calendar") renderCalendar();
+    if (id === "profile") renderProfileExtras();
+    if (push && isMobile()) history.pushState({ ov: "view", id }, "");
+  }
+  function goMenu() {
+    document.body.classList.add("m-home");
+  }
+  document.getElementById("openSettings").onclick = () => goScreen("settings", true);
+  document.getElementById("mGear").onclick = () => goScreen("settings", true);
+  document.getElementById("mProf").onclick = () => goScreen("profile", true);
+  document.getElementById("mProfHome").onclick = () => goScreen("profile", true);
+  document.getElementById("mBack").onclick = () => history.back();
+  document.querySelectorAll(".nav button").forEach(btn => btn.addEventListener("click", () => {
+    if (isMobile()) history.pushState({ ov: "view", id: btn.dataset.view }, "");
+  }));
+
+  if (isMobile()) {
+    // Estado base: el primer "atrás" vuelve al menú; el segundo pregunta si quieres salir
+    history.replaceState({ ov: "guard" }, "");
+    history.pushState({ ov: "home" }, "");
+  }
+  window.addEventListener("popstate", e => {
+    const s = e.state || {};
+    if (s.ov === "view") goScreen(s.id, false);
+    else if (s.ov === "home") goMenu();
+    else {
+      askConfirm("¿Seguro que quieres salir de la página?", "Salir").then(ok => {
+        if (ok) history.back();
+        else history.pushState({ ov: "home" }, "");
+      });
+    }
+  });
 })();
 </script>
 </body>
