@@ -56,7 +56,7 @@ async function getSession(st, event) {
   return { token, userId: s.userId };
 }
 
-const PROFILE_EMPTY = { name: "", accent: "#c9b8ff", photo: "", motto: "", birthday: "", role: "", goals: [], goalsMonth: "", share: { photo: true, stats: true }, onboarded: false };
+const PROFILE_EMPTY = { name: "", accent: "#9281f7", photo: "", motto: "", birthday: "", role: "", goals: [], goalsMonth: "", share: { photo: true, stats: true }, onboarded: false };
 // Solo acepta los campos del perfil con su tipo y tamaño; el código no se cambia desde el cliente
 function cleanProfile(input) {
   const i = input || {};
