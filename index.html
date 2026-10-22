@@ -87,17 +87,16 @@
   .notes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
   .note { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
   .note textarea { min-height: 120px; border: none; background: transparent; padding: 0; resize: vertical; }
+  .note textarea, .note-body { overflow-wrap: anywhere; word-break: break-word; overflow-x: hidden; }
   .note .foot { display: flex; justify-content: flex-end; margin-top: 8px; }
   .note button { font-size: 12px; padding: 4px 10px; }
-
-  /* Asistente */
-  .chat { max-width: 680px; }
-  .log { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; min-height: 260px; margin-bottom: 14px;
-    display: flex; flex-direction: column; gap: 10px; background: var(--panel); }
-  .msg { padding: 10px 14px; border-radius: 12px; max-width: 85%; line-height: 1.45; font-size: 15px; }
-  .msg.me { background: var(--accent); color: #0b0b0c; align-self: flex-end; }
-  .msg.ai { background: var(--bg); border: 1px solid var(--line); align-self: flex-start; }
-  .hint { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  .nsec { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+  .nsec:empty { display: none; }
+  .nacts { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .note-box { max-width: 640px; }
+  .note-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .note-top button { font-size: 12px; padding: 4px 10px; }
+  .note-body { width: 100%; min-height: 320px; resize: vertical; line-height: 1.5; font-size: 16px; }
 
   /* Modal */
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; padding: 20px; }
@@ -193,8 +192,6 @@
   .wev { font-size: 12px; padding: 7px 9px; border-radius: 10px; margin-bottom: 6px; background: var(--bg);
     border: 1px solid var(--line); border-left: 3px solid var(--c, #e8e8ea); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .wev .t { color: var(--muted); margin-right: 4px; }
-  .wtask { font-size: 12px; color: var(--muted); margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .wempty { font-size: 12px; color: #55555c; text-align: center; margin-top: 16px; }
   @media (max-width: 760px) {
     .week { grid-template-columns: repeat(7, minmax(110px, 1fr)); overflow-x: auto; }
   }
@@ -289,43 +286,6 @@
   body[data-size="small"] { font-size: 14px; }
   body[data-size="large"] { font-size: 18px; }
 
-  /* Amigos */
-  .chk { display: flex; align-items: center; gap: 10px; font-size: 15px; cursor: pointer; }
-  .chk input { width: 18px; height: 18px; accent-color: var(--pc); }
-  .flist { display: grid; gap: 10px; max-width: 640px; }
-  .fcard { display: flex; align-items: center; gap: 14px; background: var(--panel); border: 1px solid var(--line);
-    border-radius: 18px; padding: 12px 14px; flex-wrap: wrap; }
-  .fav { width: 46px; height: 46px; border-radius: 50%; background: var(--pc); color: #0b0b0c; display: grid;
-    place-items: center; font-weight: 700; overflow: hidden; flex-shrink: 0; }
-  .fav img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .finfo { flex: 1; min-width: 0; }
-  .fname { font-weight: 600; }
-  .fcode { font-size: 12px; color: var(--muted); letter-spacing: .08em; }
-  .factions { display: flex; gap: 8px; flex-wrap: wrap; }
-  .factions button { font-size: 13px; padding: 6px 12px; }
-
-  /* Amigos: alineación fija de tarjetas, botones y campo de búsqueda */
-  #friends .flist { max-width: 720px; }
-  #friends .fcard { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 14px; }
-  #friends .factions { justify-content: flex-end; flex-wrap: nowrap; }
-  #friends .factions button { white-space: nowrap; height: 34px; padding: 0 14px; }
-  #friends .goal-add { align-items: stretch; }
-  #friends .goal-add input, #friends .goal-add button { height: 42px; }
-  #friends .goal-add button { white-space: nowrap; padding: 0 18px; }
-  #friends .sub { margin: 0 0 22px; }
-  #friends .fcard + .fcard { margin-top: 0; }
-  @media (max-width: 760px) {
-    #friends .fcard { grid-template-columns: 46px minmax(0, 1fr); }
-    #friends .factions { grid-column: 1 / -1; justify-content: flex-start; }
-  }
-
-  /* Perfil de amigo: que todo quepa dentro del panel */
-  #fDetail { max-width: 720px; box-sizing: border-box; display: grid; gap: 14px; }
-  #fDetail > * { min-width: 0; max-width: 100%; box-sizing: border-box; }
-  #fDetail .fcard { grid-template-columns: 46px minmax(0, 1fr); }
-  #fDetail .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: none; margin: 0; }
-  #fDetail .stat { min-width: 0; }
-  #fDetail > button { width: 100%; margin: 0; }
 
   /* Ajustes para celular */
   @media (max-width: 760px) {
@@ -344,8 +304,6 @@
     .stat .sv { font-size: 22px; }
     .cal .day { min-height: 64px; }
     .srow { flex-direction: column; align-items: flex-start; }
-    .codecard { flex-direction: column; align-items: flex-start; }
-    .fcard { gap: 10px; }
   }
 
   /* Avisos y confirmaciones */
@@ -361,9 +319,6 @@
   :root.light .cbtns .danger { background: #d9534f; border-color: #d9534f; color: #ffffff; }
 
   /* Búsqueda y hábitos por semana */
-  .sres { cursor: pointer; }
-  .sres:hover { border-color: var(--pc); }
-  .sicon { font-size: 18px; }
   .hweek-wrap { margin-bottom: 26px; }
   .hweek-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
   .hweek-nav span { flex: 1; text-align: center; color: var(--muted); font-size: 14px; }
@@ -398,10 +353,6 @@
   .ob-nav { display: flex; justify-content: space-between; align-items: center; }
   .ob-skip { background: none; border: none; color: var(--muted); }
   .ob-skip:hover { color: var(--text); background: none; }
-
-  /* Código de amigo */
-  .codecard { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .codeval { display: flex; gap: 10px; align-items: center; font-weight: 700; font-size: 18px; letter-spacing: .1em; }
 
   /* Perfil ampliado */
   .motto { color: var(--muted); font-style: italic; font-size: 15px; margin: 0 0 4px; }
@@ -444,9 +395,8 @@
   .tpick select { border-radius: 12px; }
   .cal { border-radius: 22px; }
   .ev { border-radius: 999px; padding: 3px 10px; }
-  .task, .note, .log, .habit-check, .habit-row, .modal .box, .chip { border-radius: 20px; }
+  .task, .note, .habit-check, .habit-row, .modal .box, .chip { border-radius: 20px; }
   .chip { border-radius: 999px; }
-  .msg { border-radius: 18px; }
   .bar, .bar span { border-radius: 999px; }
 
   @media (max-width: 760px) {
@@ -487,8 +437,6 @@
     .hw-name { font-size: 13px; }
     .days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
     .days .chip { padding: 8px 0; font-size: 12px; text-align: center; min-width: 0; }
-    #friends .goal-add input { height: 46px; padding: 0 14px; line-height: 46px; }
-    #friends .goal-add button { height: 46px; }
 
     body.m-home .m-hello { display: block; margin: 4px 0 20px; animation: menuIn .5s ease .05s both; }
     .m-date { font-size: 13px; color: var(--pc); font-weight: 600; text-transform: capitalize; letter-spacing: .04em; }
@@ -604,9 +552,6 @@
       <button data-view="habits">Hábitos</button>
       <button data-view="tasks">Tareas</button>
       <button data-view="notes">Notas</button>
-      <button data-view="search">Buscar</button>
-      <button data-view="friends">Amigos</button>
-      <button data-view="assistant">Asistente</button>
     </nav>
     <div class="sfoot">
       <div class="m-row">
@@ -701,7 +646,10 @@
     <section class="view" id="notes">
       <h1>Notas</h1>
       <p class="sub">Ideas y recordatorios rápidos.</p>
-      <div class="toolbar"><button class="primary" id="addNote">+ Nota</button></div>
+      <div class="toolbar"><button class="primary" id="addNote">+ Nota</button>
+        <input id="secName" maxlength="30" placeholder="Nombre de sección" style="max-width:220px">
+        <button id="secAdd">+ Sección</button></div>
+      <div class="toolbar" id="secBar" style="margin-bottom:16px"></div>
       <div class="notes" id="noteList"></div>
     </section>
 
@@ -729,16 +677,6 @@
             <button data-size="small">Pequeño</button>
             <button data-size="normal">Normal</button>
             <button data-size="large">Grande</button>
-          </div>
-        </div>
-        <div class="srow">
-          <div>
-            <div class="slabel">Idioma</div>
-            <div class="sdesc">Idioma de la página.</div>
-          </div>
-          <div class="seg" id="setLang">
-            <button data-lang="es">Español</button>
-            <button data-lang="en">English</button>
           </div>
         </div>
         <div class="srow">
@@ -786,16 +724,6 @@
     <section class="view" id="profile">
       <h1>Perfil</h1>
       <p class="sub">Tu nombre y el color que se usa en la página.</p>
-      <div class="prof-card codecard">
-        <div>
-          <div class="slabel">Tu código de amigo</div>
-          <div class="sdesc">Compártelo para que te agreguen.</div>
-        </div>
-        <div class="codeval">
-          <span id="pCode">—</span>
-          <button id="pCopy">Copiar</button>
-        </div>
-      </div>
       <div class="prof-card">
         <label class="fld">Nombre
           <input id="pName" placeholder="¿Cómo te llamas?" maxlength="30">
@@ -831,12 +759,6 @@
           <span class="saved" id="pSavedMore"></span>
         </div>
       </div>
-      <div class="prof-card">
-        <div class="slabel">Privacidad para amigos</div>
-        <div class="sdesc">Tu nombre y tu código siempre se ven. Elige lo demás:</div>
-        <label class="chk"><input type="checkbox" id="shPhoto"> Compartir foto</label>
-        <label class="chk"><input type="checkbox" id="shStats"> Compartir estadísticas</label>
-      </div>
       <h2>Metas del mes</h2>
       <div class="prof-card" id="goalsCard"></div>
       <h2>Estadísticas</h2>
@@ -848,51 +770,6 @@
       </div>
     </section>
 
-    <!-- BUSCAR -->
-    <section class="view" id="search">
-      <h1>Buscar</h1>
-      <p class="sub">Encuentra eventos, tareas, notas y hábitos desde un solo campo.</p>
-      <div class="prof-card" style="max-width:none">
-        <input id="sQuery" placeholder="Escribe algo, por ejemplo: dentista">
-      </div>
-      <div class="flist" id="sResults" style="max-width:none; margin-top:16px"></div>
-    </section>
-
-    <!-- AMIGOS -->
-    <section class="view" id="friends">
-      <h1>Amigos</h1>
-      <p class="sub">Agrega amigos con su código o su correo, y mira sus estadísticas si las comparten.</p>
-      <div class="prof-card">
-        <div class="slabel">Agregar amigo</div>
-        <div class="goal-add">
-          <input id="fAdd" maxlength="60" placeholder="Código OV-XXXX o correo">
-          <button class="primary" id="fAddBtn">Enviar</button>
-        </div>
-        <span class="saved" id="fMsg"></span>
-      </div>
-      <h2>Solicitudes recibidas</h2>
-      <div class="flist" id="fRequests"></div>
-      <h2>Solicitudes enviadas</h2>
-      <div class="flist" id="fOutgoing"></div>
-      <h2>Mis amigos</h2>
-      <div class="flist" id="fFriends"></div>
-      <div class="prof-card" id="fDetail" style="display:none; margin-top:20px"></div>
-    </section>
-
-    <!-- ASISTENTE -->
-    <section class="view" id="assistant">
-      <h1>Asistente</h1>
-      <p class="sub">Escribe en lenguaje natural.</p>
-      <div class="chat">
-        <div class="log" id="log"></div>
-        <div class="form wide" style="grid-template-columns: 1fr auto; margin:0">
-          <input id="aiInput" placeholder="Ej: agenda dentista 2026-10-20 10:00">
-          <button class="primary" id="aiSend">Enviar</button>
-        </div>
-        <p class="hint">Comandos: "agenda [título] [AAAA-MM-DD] [HH:MM]", "pendientes", "ayuda".
-          Puedes escribir en lenguaje natural, por ejemplo: "agenda gym los martes a las 7" o "¿qué tengo hoy?".</p>
-      </div>
-    </section>
   </main>
 </div>
 
@@ -955,11 +832,24 @@
   </div>
 </div>
 
+<!-- Nota abierta -->
+<div class="modal" id="noteModal">
+  <div class="box note-box">
+    <div class="note-top">
+      <span class="slabel">Nota</span>
+      <button type="button" id="noteCopy">Copiar</button>
+    </div>
+    <div class="fld">Sección<select id="noteSection"></select></div>
+    <textarea id="noteBody" class="note-body" placeholder="Escribe tu nota…"></textarea>
+    <div class="toolbar" style="margin:0"><button class="primary" id="noteClose">Cerrar</button></div>
+  </div>
+</div>
+
 <script>
 (function () {
   // ---------- Almacenamiento local (sin cuentas por ahora) ----------
   const TOKEN_KEY = "ov-token";
-  const empty = { events: [], tasks: [], notes: [], habits: [] };
+  const empty = { events: [], tasks: [], notes: [], habits: [], sections: [] };
   let data = { ...empty };
   let token = localStorage.getItem(TOKEN_KEY) || ""; // la sesión se recuerda en este navegador
   let saveTimer = null;
@@ -1057,7 +947,6 @@
       views.forEach(v => v.classList.toggle("active", v.id === btn.dataset.view));
       if (btn.dataset.view === "today") renderToday();
       if (btn.dataset.view === "profile") renderProfileExtras();
-      if (btn.dataset.view === "friends") loadFriends();
       if (btn.dataset.view === "habits") renderHabitWeek();
     });
   });
@@ -1419,15 +1308,20 @@
   document.getElementById("viewGrid").onclick = () => { taskView = "grid"; renderTasks(); };
 
   // ---------- Notas ----------
+  // Filtro de secciones: "__all__" = Todas, "__none__" = Sin sección, o el nombre de una sección
+  let noteFilter = "__all__";
   const NOTE_COLORS = ["", "#c9b8ff", "#a8e6cf", "#ffd6a5", "#ffadad", "#9ad0ff", "#ffe08a", "#f5a3d6"];
   function renderNotes() {
     const list = document.getElementById("noteList");
     list.innerHTML = "";
-    data.notes.forEach(n => {
+    renderNoteSections();
+    const shown = data.notes.filter(n => noteFilter === "__all__" || (n.section || "") === (noteFilter === "__none__" ? "" : noteFilter));
+    shown.forEach(n => {
       const card = document.createElement("div");
       card.className = "note" + (n.color ? " colored" : "");
       if (n.color) card.style.background = n.color;
-      card.innerHTML = '<textarea></textarea><div class="foot"><div class="ncolors"></div><button class="ndel">Borrar</button></div>';
+      card.innerHTML = '<div class="nsec"></div><textarea></textarea><div class="foot"><div class="ncolors"></div><div class="nacts"><button class="nopen">Abrir</button><button class="ncopy">Copiar</button><button class="ndel">Borrar</button></div></div>';
+      card.querySelector(".nsec").textContent = n.section || "";
       const ta = card.querySelector("textarea");
       ta.value = n.text;
       ta.addEventListener("input", () => { n.text = ta.value; save(); });
@@ -1443,6 +1337,8 @@
         dots.appendChild(b);
       });
 
+      card.querySelector(".nopen").onclick = () => openNote(n);
+      card.querySelector(".ncopy").onclick = () => copyNote(n.text);
       card.querySelector(".ndel").onclick = async () => {
         const preview = (n.text || "").trim().slice(0, 40);
         const label = preview ? '"' + preview + (n.text.length > 40 ? "…" : "") + '"' : "esta nota vacía";
@@ -1452,107 +1348,117 @@
       list.appendChild(card);
     });
     if (!data.notes.length) list.innerHTML = '<p class="sub">Sin notas todavía.</p>';
+    else if (!shown.length) list.innerHTML = '<p class="sub">Sin notas en esta sección.</p>';
   }
-  document.getElementById("addNote").onclick = () => { data.notes.unshift({ id: uid(), text: "" }); save(); renderNotes(); };
+  document.getElementById("addNote").onclick = () => { data.notes.unshift({ id: uid(), text: "", section: currentSection() }); save(); renderNotes(); };
 
-  // ---------- Asistente (local, por reglas) ----------
-  const log = document.getElementById("log");
-  function bubble(text, who) {
-    const m = document.createElement("div");
-    m.className = "msg " + who;
-    m.textContent = text;
-    log.appendChild(m);
-    log.scrollTop = log.scrollHeight;
+  // Secciones de notas
+  function allSections() {
+    const set = new Set([...(data.sections || []), ...data.notes.map(n => n.section || "").filter(Boolean)]);
+    return [...set].sort((a, b) => a.localeCompare(b, "es"));
   }
-  function assistant(input) {
-    const text = input.trim();
-    const lower = text.toLowerCase();
-    if (lower === "ayuda") {
-      return 'Puedo: "agenda [título] [AAAA-MM-DD] [HH:MM]" para crear un evento, o "pendientes" para ver tus tareas abiertas.';
-    }
-    if (lower === "pendientes") {
-      const open = data.tasks.filter(t => !t.done);
-      return open.length ? "Tienes " + open.length + " pendientes: " + open.map(t => t.title).join(", ") + "." : "No tienes pendientes. ¡Buen trabajo!";
-    }
-    const m = text.match(/^agenda\s+(.+?)\s+(\d{4}-\d{2}-\d{2})(?:\s+(\d{1,2}:\d{2}))?$/i);
-    if (m) {
-      data.events.push({ id: uid(), title: m[1], date: m[2], time: m[3] || "", color: AREA_COLORS.Personal });
-      save(); renderCalendar();
-      return `Listo: "${m[1]}" agendado el ${m[2]}${m[3] ? " a las " + m[3] : ""}.`;
-    }
-    return 'No entendí. Escribe "ayuda" para ver los comandos disponibles.';
+  function currentSection() {
+    return noteFilter === "__all__" || noteFilter === "__none__" ? "" : noteFilter;
   }
-  // Aplica lo que decide la IA: crear eventos, tareas o hábitos
-  function applyActions(actions) {
-    let changed = false;
-    actions.forEach(a => {
-      if (a.type === "add_event" && a.title && a.date) {
-        data.events.push({ id: uid(), title: a.title, date: a.date, time: a.time || "", color: AREA_COLORS.Personal });
-        changed = true;
-      } else if (a.type === "add_task" && a.title) {
-        data.tasks.push({
-          id: uid(), title: a.title,
-          area: AREA_COLORS[a.area] ? a.area : "Personal",
-          date: a.date || "",
-          priority: ["alta", "media", "baja"].includes(a.priority) ? a.priority : "media",
-          done: false
-        });
-        changed = true;
-      } else if (a.type === "add_habit" && a.title && Array.isArray(a.days) && a.days.length) {
-        data.habits.push({
-          id: uid(), title: a.title, time: a.time || "", end: a.end || "",
-          days: a.days.filter(d => Number.isInteger(d) && d >= 0 && d <= 6), logs: {}
-        });
-        changed = true;
-      }
+  function renderNoteSections() {
+    const bar = document.getElementById("secBar");
+    bar.innerHTML = "";
+    const chip = (label, value) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip" + (noteFilter === value ? " on" : "");
+      b.textContent = label;
+      b.onclick = () => { noteFilter = value; renderNotes(); };
+      bar.appendChild(b);
+    };
+    chip("Todas", "__all__");
+    allSections().forEach(s => chip(s, s));
+    if (data.notes.some(n => !n.section)) chip("Sin sección", "__none__");
+    if (currentSection()) {
+      const del = document.createElement("button");
+      del.type = "button";
+      del.className = "chip";
+      del.textContent = "Borrar sección";
+      del.onclick = async () => {
+        if (!(await askConfirm('¿Borrar la sección "' + noteFilter + '"? Sus notas no se borran, pasan a "Sin sección".'))) return;
+        data.notes.forEach(n => { if (n.section === noteFilter) n.section = ""; });
+        data.sections = (data.sections || []).filter(x => x !== noteFilter);
+        noteFilter = "__all__"; save(); renderNotes();
+      };
+      bar.appendChild(del);
+    }
+  }
+  function addSection() {
+    const input = document.getElementById("secName");
+    const name = input.value.trim().replace(/\s+/g, " ").slice(0, 30);
+    if (!name) { toast("Escribe un nombre para la sección."); return; }
+    const low = name.toLowerCase();
+    if (allSections().some(x => x.toLowerCase() === low) || low === "todas" || low === "sin sección") {
+      toast("Ya existe una sección con ese nombre."); return;
+    }
+    data.sections = [...(data.sections || []), name];
+    noteFilter = name; input.value = ""; save(); renderNotes();
+  }
+  document.getElementById("secAdd").onclick = addSection;
+  document.getElementById("secName").addEventListener("keydown", e => { if (e.key === "Enter") addSection(); });
+
+  // Nota abierta: se lee y edita en una ventana propia
+  let openedNote = null;
+  const noteModal = document.getElementById("noteModal");
+  const noteBody = document.getElementById("noteBody");
+  function openNote(n) {
+    openedNote = n;
+    noteBody.value = n.text || "";
+    fillNoteSection(n);
+    noteModal.classList.add("open");
+    noteBody.focus();
+  }
+  function fillNoteSection(n) {
+    const sel = document.getElementById("noteSection");
+    sel.innerHTML = "";
+    [["", "Sin sección"]].concat(allSections().map(x => [x, x])).forEach(([v, t]) => {
+      const o = document.createElement("option");
+      o.value = v; o.textContent = t; sel.appendChild(o);
     });
-    if (changed) { save(); renderEverything(); }
+    sel.value = n.section || "";
   }
+  document.getElementById("noteSection").onchange = e => {
+    if (!openedNote) return;
+    openedNote.section = e.target.value; save();
+  };
+  function closeNote() {
+    noteModal.classList.remove("open");
+    openedNote = null;
+    renderNotes();
+  }
+  noteBody.addEventListener("input", () => {
+    if (!openedNote) return;
+    openedNote.text = noteBody.value; save();
+  });
+  document.getElementById("noteClose").onclick = closeNote;
+  noteModal.addEventListener("click", e => { if (e.target === noteModal) closeNote(); });
+  document.getElementById("noteCopy").onclick = () => copyNote(noteBody.value);
 
-  async function sendAI() {
-    const input = document.getElementById("aiInput");
-    const text = input.value.trim();
-    if (!text) return;
-    bubble(text, "me");
-    input.value = "";
-
-    const thinking = document.createElement("div");
-    thinking.className = "msg ai";
-    thinking.textContent = "Pensando…";
-    log.appendChild(thinking);
-    log.scrollTop = log.scrollHeight;
-
-    try {
-      const res = await fetch("/api/ai", {
-        method: "POST",
-        headers: authHeaders(),
-        body: JSON.stringify({ message: text, today: iso(new Date()), data, lang })
-      });
-      const body = await res.json().catch(() => ({}));
-      thinking.remove();
-      if (!res.ok) { bubble(body.error || ("No pude responder (código " + res.status + ")."), "ai"); return; }
-      bubble(body.reply || "Listo.", "ai");
-      applyActions(body.actions || []);
-    } catch (e) {
-      // Sin conexión con la IA: usamos los comandos locales como respaldo
-      thinking.remove();
-      bubble(assistant(text), "ai");
+  // Copia rápida al portapapeles; si el navegador no deja usar la API, usa un respaldo
+  function copyNote(text) {
+    if (!(text || "").trim()) { toast("La nota está vacía."); return; }
+    const fallback = () => {
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) {}
+      ta.remove();
+      toast(ok ? "Nota copiada." : "No se pudo copiar.");
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => toast("Nota copiada."), fallback);
+    } else {
+      fallback();
     }
   }
-  document.getElementById("aiSend").onclick = sendAI;
-  document.getElementById("aiInput").addEventListener("keydown", e => { if (e.key === "Enter") sendAI(); });
-  bubble('Hola. Escribe "ayuda" para ver lo que puedo hacer.', "ai");
 
   // ---------- Hora escrita (HH:MM) ----------
-  // Acepta "830", "8:30", "08:30", "9", "1405". Devuelve "HH:MM", "" si está vacío, o null si no es válida.
-  function parseTime(s) {
-    const d = (s || "").replace(/\D/g, "");
-    if (!d) return "";
-    const h = d.length <= 2 ? +d : +d.slice(0, -2);
-    const m = d.length <= 2 ? 0 : +d.slice(-2);
-    if (h > 23 || m > 59) return null;
-    return pad(h) + ":" + pad(m);
-  }
   // Selector de hora con dos apartados: horas y minutos. get() devuelve "HH:MM", "" si está vacío, o null si está a medias.
   function timePicker(box) {
     const h = document.createElement("select");
@@ -1962,74 +1868,9 @@
     settings.showHabits = e.target.checked; saveSettings(); renderCalendar();
   };
   const remPicker = timePicker(document.getElementById("remTimeBox"));
-  document.getElementById("openSettings").onclick = () => {
-    document.body.classList.remove("m-home");
-    document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-    views.forEach(v => v.classList.toggle("active", v.id === "settings"));
-  };
   applySettings();
 
-  // ---------- Búsqueda, exportación, recordatorio y hábitos por semana ----------
-  function goView(v) {
-    document.body.classList.remove("m-home");
-    document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.view === v));
-    views.forEach(x => x.classList.toggle("active", x.id === v));
-    if (v === "today") renderToday();
-    if (v === "habits") renderHabitWeek();
-    if (v === "friends") loadFriends();
-    if (v === "calendar") renderCalendar();
-  }
-
-  // Búsqueda
-  const sQuery = document.getElementById("sQuery");
-  function renderSearch() {
-    const q = sQuery.value.trim().toLowerCase();
-    const box = document.getElementById("sResults");
-    box.innerHTML = "";
-    if (!q) {
-      const p = document.createElement("p");
-      p.className = "sub"; p.style.margin = "0";
-      p.textContent = "Escribe para buscar.";
-      box.appendChild(p);
-      return;
-    }
-    const hits = [];
-    data.events.filter(e => (e.title || "").toLowerCase().includes(q)).forEach(e => hits.push({
-      icon: "📅", type: "Evento", label: e.title, sub: e.date + (e.time ? " · " + e.time : ""),
-      go: () => { goView("calendar"); setCalView("day", new Date(e.date + "T00:00")); }
-    }));
-    data.tasks.filter(t => (t.title || "").toLowerCase().includes(q)).forEach(t => hits.push({
-      icon: "☐", type: "Tarea", label: t.title, sub: t.area + (t.date ? " · " + t.date : ""),
-      go: () => goView("tasks")
-    }));
-    data.notes.filter(n => (n.text || "").toLowerCase().includes(q)).forEach(n => hits.push({
-      icon: "📝", type: "Nota", label: (n.text || "").trim().slice(0, 60) || "Nota vacía", sub: "",
-      go: () => goView("notes")
-    }));
-    data.habits.filter(h => (h.title || "").toLowerCase().includes(q)).forEach(h => hits.push({
-      icon: "🔁", type: "Hábito", label: h.title, sub: daysLabel(h.days),
-      go: () => goView("habits")
-    }));
-    if (!hits.length) {
-      const p = document.createElement("p");
-      p.className = "sub"; p.style.margin = "0";
-      p.textContent = "Sin resultados para \"" + sQuery.value.trim() + "\".";
-      box.appendChild(p);
-      return;
-    }
-    hits.slice(0, 50).forEach(hit => {
-      const el = document.createElement("div");
-      el.className = "fcard sres";
-      el.innerHTML = '<div class="fav sicon"></div><div class="finfo"><div class="fname"></div><div class="fcode"></div></div>';
-      el.querySelector(".sicon").textContent = hit.icon;
-      el.querySelector(".fname").textContent = hit.label;
-      el.querySelector(".fcode").textContent = hit.type + (hit.sub ? " · " + hit.sub : "");
-      el.onclick = hit.go;
-      box.appendChild(el);
-    });
-  }
-  sQuery.addEventListener("input", renderSearch);
-
+  // ---------- Recordatorio y hábitos por semana ----------
   // Hábitos por semana: cuadrícula de días marcables
   let hwOffset = 0;
   function cellDiv(cls, text) {
@@ -2305,16 +2146,6 @@
         }
       },
       {
-        title: "Idioma",
-        q: "¿En qué idioma quieres la página?",
-        render() {
-          body.appendChild(options([["es", "Español"], ["en", "English"]], ob.lang, v => {
-            ob.lang = v;
-            setLanguage(v);
-          }));
-        }
-      },
-      {
         title: "Tu día a día",
         q: "¿Cómo describirías tu rutina?",
         render() {
@@ -2393,7 +2224,6 @@
       profile.onboarded = true;
       saveProfile();
       settings.theme = ob.theme;
-      settings.lang = ob.lang;
       settings.reminder.on = ob.remOn;
       if (picker && picker.get()) settings.reminder.time = picker.get();
       saveSettings();
@@ -2421,184 +2251,14 @@
     show();
   }
 
-  // ---------- Idioma (español / English) ----------
-  // Diccionario: clave = texto en español tal como aparece; valor = traducción.
-  const EN = {
-    "Ej: Ir al gym, leer 20 min, tomar agua": "E.g. Go to the gym, read 20 min, drink water",
-    "Ej: agenda dentista 2026-10-20 10:00": "E.g. dentist appointment 2026-10-20 10:00",
-    "Ej. Un día a la vez": "E.g. One day at a time",
-    "Contraseña (mín. 6 caracteres)": "Password (min. 6 characters)",
-    "Nueva meta, por ejemplo: correr 5 km": "New goal, for example: run 5 km",
-    "Nueva tarea": "New task",
-    "Título": "Title",
-    "¿Cómo te llamas?": "What is your name?",
-    "Tu nombre": "Your name",
-    "Nombre del hábito": "Habit name",
-
-    "Acciones que se repiten. Elige los días y aparecerán en Hoy cada semana.": "Recurring actions. Choose the days and they will appear in Today every week.",
-    "Haz clic en un día para agregar un evento.": "Click a day to add an event.",
-    "Pendientes con fecha y área.": "Pending tasks with date and area.",
-    "Ideas y recordatorios rápidos.": "Quick ideas and reminders.",
-    "Tu nombre y el color que se usa en la página.": "Your name and the color used on the page.",
-    "Agrega amigos con su código o su correo, y mira sus estadísticas si las comparten.": "Add friends with their code or email, and see their statistics if they share them.",
-    "Escribe en lenguaje natural.": "Write in natural language.",
-    "Sin tareas todavía.": "No tasks yet.",
-    "Aún no tienes hábitos. Agrega el primero arriba.": "You have no habits yet. Add the first one above.",
-    "No hay hábitos programados para hoy.": "No habits scheduled for today.",
-    "Sin tareas para hoy.": "No tasks for today.",
-    "Cambiar foto": "Change photo",
-    "Elegir foto": "Choose photo",
-    "Copiado": "Copied",
-    "Copiar": "Copy",
-    "En curso": "In progress",
-    "Enviando…": "Sending…",
-    "Esta persona decidió no compartir sus estadísticas.": "This person chose not to share their statistics.",
-    "Guardado": "Saved",
-    "No hay conexión con el servidor. Intenta de nuevo.": "No connection to the server. Try again.",
-    "No hay conexión con el servidor.": "No connection to the server.",
-    "Pensando…": "Thinking…",
-    "Prioridad ": "Priority ",
-    "Sin resultados para ": "No results for ",
-    "Tarea": "Task",
-    "⚙ Configuración": "⚙ Settings",
-    "⚙ Configuración ": "⚙ Settings ",
-
-    "Solo este día": "Only this day", "Toda la serie": "Whole series",
-    "Hoy": "Today", "Calendario": "Calendar", "Hábitos": "Habits", "Tareas": "Tasks", "Notas": "Notes",
-    "Buscar": "Search", "Amigos": "Friends", "Asistente": "Assistant", "Perfil": "Profile",
-    "Configuración": "Settings", "Cerrar sesión": "Log out", "Mi organización": "My organization",
-    "Mes": "Month", "Semana": "Week", "Día": "Day", "Año": "Year", "+ Evento": "+ Event",
-    "Guardar": "Save", "Guardar nombre": "Save name", "Cancelar": "Cancel", "Eliminar": "Delete",
-    "Agregar": "Add", "Enviar": "Send", "Aceptar": "Accept", "Rechazar": "Decline", "Ver perfil": "View profile",
-    "Siguiente": "Next", "Omitir": "Skip", "Empezar": "Start", "Copiar": "Copy", "Copiado": "Copied",
-    "Hábitos de hoy": "Today's habits", "Agenda": "Agenda", "Tareas para hoy": "Tasks for today",
-    "Nada agendado hoy.": "Nothing scheduled today.", "Sin tareas para hoy.": "No tasks for today.",
-    "Sin notas todavía.": "No notes yet.", "Sin resultados": "No results",
-    "Tema": "Theme", "Oscuro": "Dark", "Claro": "Light", "Tamaño de texto": "Text size",
-    "Pequeño": "Small", "Normal": "Normal", "Grande": "Large", "Color de acento": "Accent color",
-    "Mostrar hábitos en la vista de horas": "Show habits in the time view",
-    "Recordatorio diario": "Daily reminder", "Exportar mis datos": "Export my data", "Exportar": "Export",
-    "Importar datos": "Import data", "Elegir archivo": "Choose file", "Idioma": "Language",
-    "Idioma de la página": "Page language", "Español": "Español", "English": "English",
-    "Sí": "Yes", "No": "No", "Nombre": "Name", "Frase personal": "Personal motto", "Cumpleaños": "Birthday",
-    "Ocupación": "Occupation", "Estudiante": "Student", "Trabajo": "Work", "Casa": "Home",
-    "Metas del mes": "Monthly goals", "Estadísticas": "Statistics", "Privacidad para amigos": "Privacy for friends",
-    "Compartir foto": "Share photo", "Compartir estadísticas": "Share statistics", "Subir foto": "Upload photo",
-    "Quitar foto": "Remove photo", "Quitar": "Remove", "Tu código de amigo": "Your friend code",
-    "Código OV-XXXX o correo": "Code OV-XXXX or email", "Solicitudes recibidas": "Requests received",
-    "Solicitudes enviadas": "Requests sent", "Mis amigos": "My friends", "Agregar amigo": "Add friend",
-    "Vista previa": "Preview", "Eliminar amigo": "Delete friend", "Cerrar": "Close",
-    "Escribe para buscar.": "Type to search.", "Eventos": "Events", "Tarea": "Task", "Nota": "Note",
-    "Evento": "Event", "Hábito": "Habit", "Nueva meta": "New goal", "Objetivo": "Goal",
-    "Recordatorio": "Reminder", "Exportar datos": "Export data", "Importar": "Import",
-    "¡Bienvenida!": "Welcome!", "¿Cómo te llamas?": "What is your name?", "Tu foto": "Your photo",
-    "Tu día a día": "Your routine", "Apariencia": "Appearance", "Listo": "Done",
-    "¿Qué tema prefieres?": "Which theme do you prefer?", "Tu nombre": "Your name",
-    "Escribe algo, por ejemplo: dentista": "Type something, for example: dentist",
-    "Encuentra eventos, tareas, notas y hábitos desde un solo campo.": "Find events, tasks, notes and habits in one place.",
-    "Aún no tienes hábitos para mostrar.": "You have no habits to show yet.",
-    "Aún no tienes amigos. Agrega a alguien con su código.": "You have no friends yet. Add someone with their code.",
-    "Aún no tienes metas. Agrega la primera abajo.": "You have no goals yet. Add the first one below.",
-    "Entrar": "Log in", "Registrarme": "Sign up", "Inicia sesión": "Log in", "Crea tu cuenta": "Create your account",
-    "¿No tienes cuenta? Regístrate": "No account? Sign up", "¿Ya tienes cuenta? Inicia sesión": "Already have an account? Log in",
-    "Correo": "Email", "Contraseña": "Password", "Regístrate": "Sign up",
-    "Buenos días": "Good morning", "Buenas tardes": "Good afternoon", "Buenas noches": "Good evening",
-    "Hora (opcional)": "Time (optional)", "Inicio": "Start", "Fin": "End", "Nuevo evento": "New event",
-    "Título": "Title", "Guardado": "Saved", "Eliminar evento": "Delete event", "Nueva tarea": "New task",
-    "Área": "Area", "Prioridad": "Priority", "Alta": "High", "Media": "Medium", "Baja": "Low",
-    "Lista": "List", "Cuadrícula": "Grid", "Nueva nota": "New note", "Agregar hábito": "Add habit",
-    "Editar": "Edit", "Editar hábito": "Edit habit", "Nombre del hábito": "Habit name", "Guardar cambios": "Save changes",
-    "Ajustes de la página. Se guardan en este navegador.": "Page settings. Saved in this browser.",
-    "Escribe algo": "Type something", "Buscar en mi organización": "Search my organization",
-    "Trabajo": "Work", "Salud": "Health", "Casa": "Home", "Personal": "Personal",
-    "Oscuro o claro.": "Dark or light.",
-    "Ajusta las letras de toda la página.": "Adjusts the text across the whole page.",
-    "Idioma de la página.": "Page language.",
-    "Botones, progreso y detalles de la página.": "Buttons, progress and page details.",
-    "Aparecen como bloques punteados en Día y Semana.": "Shown as dashed blocks in Day and Week.",
-    "Te avisa a la hora elegida si tienes hábitos pendientes. Funciona mientras la página esté abierta.": "Reminds you at the chosen time if you have pending habits. Works while the page is open.",
-    "Descarga tus hábitos, eventos, tareas y notas en un archivo.": "Download your habits, events, tasks and notes as a file.",
-    "Carga un archivo exportado antes. Reemplaza tus datos actuales.": "Load a previously exported file. It replaces your current data.",
-    "Compártelo para que te agreguen.": "Share it so others can add you.",
-    "Tu nombre y tu código siempre se ven. Elige lo demás:": "Your name and code are always visible. Choose the rest:",
-    "Sube una foto para tu burbuja de perfil. Puedes omitir este paso.": "Upload a photo for your profile bubble. You can skip this step.",
-    "¿En qué idioma quieres la página?": "Which language do you want the page in?",
-    "¿Cómo describirías tu rutina?": "How would you describe your routine?",
-    "¿Quieres un aviso diario para tus hábitos?": "Do you want a daily reminder for your habits?",
-    "Puedes cambiar todo esto después en Configuración y Perfil.": "You can change all of this later in Settings and Profile.",
-    "Esto cambia qué aparece primero en Hoy. Puedes cambiarlo después en Perfil.": "This changes what appears first in Today. You can change it later in Profile.",
-    "🔥 Racha más larga": "🔥 Longest streak",
-    "✅ Hábitos cumplidos este mes": "✅ Habits completed this month",
-    "📌 Tareas terminadas": "📌 Tasks completed",
-    "📅 Días activos este mes": "📅 Active days this month",
-    "Hoy es": "Today is", "Semana del": "Week of", "Mes anterior": "Previous month", "Mes siguiente": "Next month"
-  };
-  let lang = settings.lang || "es";
-  const MESES_EN = ["january","february","march","april","may","june","july","august","september","october","november","december"];
-  const DOW_EN = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-  const MESES_T = () => (lang === "en" ? MESES_EN : MESES);
-  const DOW_T = () => (lang === "en" ? DOW_EN : DOW);
-  const localeTag = () => (lang === "en" ? "en-US" : "es-MX");
+  // ---------- Idioma: solo español ----------
+  const lang = "es";
+  const MESES_T = () => MESES;
+  const DOW_T = () => DOW;
+  const localeTag = () => "es-MX";
   function greetingWord(hr) {
-    if (lang === "en") return hr < 12 ? "Good morning" : hr < 19 ? "Good afternoon" : "Good evening";
     return hr < 12 ? "Buenos días" : hr < 19 ? "Buenas tardes" : "Buenas noches";
   }
-  const ORIG = new Map(); // nodo de texto -> texto original en español
-
-  function translateTextNode(n) {
-    if (!ORIG.has(n)) ORIG.set(n, n.nodeValue);
-    const orig = ORIG.get(n);
-    if (lang !== "en") { n.nodeValue = orig; return; }
-    const key = orig.trim();
-    const out = (key && EN[key] !== undefined) ? orig.replace(key, EN[key]) : orig;
-    n.nodeValue = out
-      .replace(/(\d+) días/g, "$1 days")
-      .replace(/(\d+) día\b/g, "$1 day")
-      .replace(/Tienes (\d+) (hábitos|hábito) pendientes? para hoy\./, (m, c) => "You have " + c + " pending habit" + (c === "1" ? "" : "s") + " for today.");
-  }
-  function translateTree(root) {
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const nodes = [];
-    while (walker.nextNode()) nodes.push(walker.currentNode);
-    nodes.forEach(n => {
-      const tag = n.parentNode && n.parentNode.nodeName;
-      if (tag === "SCRIPT" || tag === "STYLE") return;
-      translateTextNode(n);
-    });
-    root.querySelectorAll && root.querySelectorAll("[placeholder]").forEach(el => {
-      if (!ORIG.has(el)) ORIG.set(el, el.getAttribute("placeholder"));
-      const orig = ORIG.get(el);
-      const key = orig.trim();
-      el.setAttribute("placeholder", lang === "en" && EN[key] !== undefined ? EN[key] : orig);
-    });
-  }
-
-  function applyLang() {
-    document.documentElement.lang = lang === "en" ? "en" : "es";
-    translateTree(document.body);
-    document.querySelectorAll("#setLang button").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
-    if (window.__ovReady) {
-      renderCalendar(); renderTasks(); renderNotes(); renderHabitList(); renderToday(); renderHabitWeek();
-    }
-  }
-  function setLanguage(v) {
-    lang = v;
-    settings.lang = v;
-    saveSettings();
-    applyLang();
-  }
-  document.querySelectorAll("#setLang button").forEach(b => b.onclick = () => setLanguage(b.dataset.lang));
-
-  // Los textos que se crean después (avisos, menús, bienvenida) también se traducen
-  new MutationObserver(records => {
-    if (lang !== "en") return;
-    records.forEach(r => r.addedNodes.forEach(node => {
-      if (node.nodeType === 3) translateTextNode(node);
-      else if (node.nodeType === 1) translateTree(node);
-    }));
-  }).observe(document.body, { childList: true, subtree: true });
-
-  applyLang();
 
   // ---------- Perfil y personalización ----------
   const PROFILE_KEY = "ov-profile";
@@ -2815,23 +2475,7 @@
       box.textContent = initials(profile.name) || "🙂";
     }
   }
-  document.getElementById("pCopy").onclick = () => {
-    if (!profile.code) return;
-    try { navigator.clipboard.writeText(profile.code); } catch (e) {}
-    const b = document.getElementById("pCopy");
-    b.textContent = "Copiado";
-    setTimeout(() => { b.textContent = "Copiar"; }, 1500);
-  };
-  document.getElementById("shPhoto").onchange = e => {
-    profile.share = { ...profile.share, photo: e.target.checked }; saveProfile();
-  };
-  document.getElementById("shStats").onchange = e => {
-    profile.share = { ...profile.share, stats: e.target.checked }; saveProfile();
-  };
   function renderProfileExtras() {
-    document.getElementById("pCode").textContent = profile.code || "—";
-    document.getElementById("shPhoto").checked = !(profile.share && profile.share.photo === false);
-    document.getElementById("shStats").checked = !(profile.share && profile.share.stats === false);
     ensureGoals();
     document.getElementById("pMotto").value = profile.motto || "";
     document.getElementById("pBirthday").value = profile.birthday || "";
@@ -2889,148 +2533,6 @@
     order.forEach(k => today.appendChild(secs[k]));
   }
 
-  // ---------- Amigos ----------
-  async function friendsApi(path, body) {
-    const res = await fetch("/api/" + path, {
-      method: body ? "POST" : "GET",
-      headers: authHeaders(),
-      body: body ? JSON.stringify(body) : undefined
-    });
-    const json = await res.json().catch(() => ({}));
-    return { ok: res.ok, status: res.status, body: json };
-  }
-  function friendCard(c, actions) {
-    const el = document.createElement("div");
-    el.className = "fcard";
-    const av = document.createElement("div");
-    av.className = "fav";
-    if (c.photo) {
-      const im = document.createElement("img");
-      im.src = c.photo; im.alt = "";
-      av.appendChild(im);
-    } else {
-      av.textContent = initials(c.name) || "🙂";
-    }
-    const info = document.createElement("div");
-    info.className = "finfo";
-    const n = document.createElement("div");
-    n.className = "fname";
-    n.textContent = c.name || "Sin nombre";
-    const code = document.createElement("div");
-    code.className = "fcode";
-    code.textContent = c.code || "";
-    info.appendChild(n); info.appendChild(code);
-    el.appendChild(av); el.appendChild(info);
-    if (actions) el.appendChild(actions);
-    return el;
-  }
-  function fillList(id, items, emptyText, build) {
-    const box = document.getElementById(id);
-    box.innerHTML = "";
-    if (!items.length) {
-      const p = document.createElement("p");
-      p.className = "sub"; p.style.margin = "0";
-      p.textContent = emptyText;
-      box.appendChild(p);
-      return;
-    }
-    items.forEach(it => box.appendChild(build(it)));
-  }
-  function btn(text, cls, onClick) {
-    const b = document.createElement("button");
-    b.textContent = text;
-    if (cls) b.className = cls;
-    b.onclick = onClick;
-    return b;
-  }
-  function actionsBox(...buttons) {
-    const d = document.createElement("div");
-    d.className = "factions";
-    buttons.forEach(b => d.appendChild(b));
-    return d;
-  }
-
-  async function loadFriends() {
-    const r = await friendsApi("friends");
-    if (!r.ok) return;
-    const d = r.body;
-    fillList("fRequests", d.requests, "No tienes solicitudes pendientes.", c =>
-      friendCard(c, actionsBox(
-        btn("Aceptar", "primary", async () => { await friendsApi("friends/accept", { fromId: c.id }); loadFriends(); }),
-        btn("Rechazar", "", async () => {
-          if (!(await askConfirm('¿Rechazar la solicitud de "' + (c.name || "esta persona") + '"?'))) return;
-          await friendsApi("friends/decline", { fromId: c.id }); loadFriends();
-        })
-      )));
-    fillList("fOutgoing", d.outgoing, "No has enviado solicitudes.", c =>
-      friendCard(c, actionsBox(
-        btn("Cancelar", "", async () => { await friendsApi("friends/cancel", { toId: c.id }); loadFriends(); })
-      )));
-    fillList("fFriends", d.friends, "Aún no tienes amigos. Agrega a alguien con su código.", c =>
-      friendCard(c, actionsBox(btn("Ver perfil", "", () => openFriend(c)))));
-  }
-
-  async function openFriend(card) {
-    const r = await friendsApi("friend-stats?id=" + encodeURIComponent(card.id));
-    const box = document.getElementById("fDetail");
-    box.style.display = "";
-    box.innerHTML = "";
-    box.appendChild(friendCard(card, null));
-    const note = document.createElement("p");
-    note.className = "sub"; note.style.margin = "12px 0 0";
-    if (!r.ok) {
-      note.textContent = (r.body && r.body.error) || "No se pudo cargar el perfil.";
-      box.appendChild(note);
-      return;
-    }
-    if (r.body.hidden) {
-      note.textContent = "Esta persona decidió no compartir sus estadísticas.";
-      box.appendChild(note);
-    } else {
-      const s = r.body.stats || { longest: 0, habitsMonth: 0, tasksDone: 0, activeDays: 0 };
-      const grid = document.createElement("div");
-      grid.className = "stats";
-      grid.style.marginTop = "14px";
-      [
-        ["🔥 Racha más larga", s.longest + (s.longest === 1 ? " día" : " días")],
-        ["✅ Hábitos cumplidos este mes", String(s.habitsMonth)],
-        ["📌 Tareas terminadas", String(s.tasksDone)],
-        ["📅 Días activos este mes", String(s.activeDays)]
-      ].forEach(([label, value]) => {
-        const c = document.createElement("div");
-        c.className = "stat";
-        const l = document.createElement("div"); l.className = "sl"; l.textContent = label;
-        const v = document.createElement("div"); v.className = "sv"; v.textContent = value;
-        c.appendChild(l); c.appendChild(v);
-        grid.appendChild(c);
-      });
-      box.appendChild(grid);
-    }
-    const rm = btn("Eliminar amigo", "", async () => {
-      if (!(await askConfirm('¿Eliminar a "' + (card.name || "esta persona") + '" de tus amigos?'))) return;
-      await friendsApi("friends/remove", { friendId: card.id });
-      box.style.display = "none";
-      loadFriends();
-    });
-    rm.style.marginTop = "14px";
-    box.appendChild(rm);
-  }
-
-  document.getElementById("fAddBtn").onclick = async () => {
-    const input = document.getElementById("fAdd");
-    const msg = document.getElementById("fMsg");
-    const target = input.value.trim();
-    if (!target) return;
-    msg.textContent = "Enviando…";
-    const r = await friendsApi("friends/request", { target });
-    msg.textContent = r.ok ? (r.body.message || "") : (r.body.error || "No se pudo enviar.");
-    if (r.ok) input.value = "";
-    loadFriends();
-  };
-  document.getElementById("fAdd").addEventListener("keydown", e => {
-    if (e.key === "Enter") document.getElementById("fAddBtn").click();
-  });
-
   function updatePreview() {
     updateBubble();
     const now = new Date();
@@ -3050,50 +2552,6 @@
   renderSwatches();
   updatePreview();
 
-  // Ajustes en celular: recuerda desde qué sección se abrió para regresar a ella
-  let returnView = null;
-  // Guarda la sección de origen, salvo cuando se viene de Ajustes o Perfil (así no se pierde)
-  function rememberFrom(from) {
-    if (from === "settings" || from === "profile") return;
-    returnView = from;
-  }
-  function showSettingsScreen(from) {
-    rememberFrom(from);
-    document.body.classList.remove("m-home");
-    document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-    views.forEach(v => v.classList.toggle("active", v.id === "settings"));
-  }
-  document.getElementById("openSettings").onclick = () => showSettingsScreen(null);
-  document.getElementById("mGear").onclick = () => {
-    const cur = document.querySelector(".view.active");
-    showSettingsScreen(cur ? cur.id : null);
-  };
-  document.getElementById("mBack").onclick = () => {
-    const inSub = document.querySelector("#settings.active, #profile.active");
-    if (inSub && returnView) {
-      views.forEach(v => v.classList.toggle("active", v.id === returnView));
-      document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.view === returnView));
-      if (returnView === "today") renderToday();
-      if (returnView === "habits") renderHabitWeek();
-      if (returnView === "friends") loadFriends();
-      if (returnView === "calendar") renderCalendar();
-    } else {
-      document.body.classList.add("m-home");
-    }
-    returnView = null;
-  };
-  function showProfileScreen(from) {
-    rememberFrom(from);
-    document.body.classList.remove("m-home");
-    document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-    views.forEach(v => v.classList.toggle("active", v.id === "profile"));
-    renderProfileExtras();
-  }
-  document.getElementById("mProf").onclick = () => {
-    const cur = document.querySelector(".view.active");
-    showProfileScreen(cur ? cur.id : null);
-  };
-  document.getElementById("mProfHome").onclick = () => showProfileScreen(null);
   boot();
 
   // ---------- Celular: regreso dentro de la app y confirmación al salir ----------
@@ -3104,7 +2562,6 @@
     views.forEach(v => v.classList.toggle("active", v.id === id));
     if (id === "today") renderToday();
     if (id === "habits") renderHabitWeek();
-    if (id === "friends") loadFriends();
     if (id === "calendar") renderCalendar();
     if (id === "profile") renderProfileExtras();
     if (push && isMobile()) history.pushState({ ov: "view", id }, "");
