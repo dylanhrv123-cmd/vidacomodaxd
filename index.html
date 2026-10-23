@@ -7,17 +7,21 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" href="/icon-192.png">
-<meta name="theme-color" content="#0b0b0c">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b0b0c;
-    --panel: #151517;
-    --line: #26262a;
-    --text: #f2f2f3;
-    --muted: #8a8a92;
-    --accent: #e8e8ea;
-    --hot: #7c5cff;
-    --radius: 20px;
+    --bg: #000000;
+    --panel: #000000;
+    --line: #292d30;
+    --text: #ffffff;
+    --muted: #a1a4a5;
+    --accent: #f0f0f0;
+    --hot: #9281f7;
+    --radius: 16px;
+    --mono: "Commit Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
   * { box-sizing: border-box; }
   :root { color-scheme: dark; }
@@ -29,26 +33,34 @@
   input[type="time"]::-webkit-calendar-picker-indicator:hover,
   input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
   option { background: var(--panel); color: var(--text); }
-  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
-    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  html, body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font-family: Inter, "Noto Sans", system-ui, sans-serif; }
   button, input, select, textarea { font: inherit; color: inherit; }
-  button { cursor: pointer; background: none; border: 1px solid var(--line); border-radius: 10px;
+  button { cursor: pointer; background: none; border: 1px solid var(--line); border-radius: 6px;
     padding: 8px 12px; transition: background .2s, border-color .2s; }
   button:hover { background: var(--panel); border-color: #3a3a40; }
-  button.primary { background: var(--pc); color: #0b0b0c; border-color: var(--pc); font-weight: 600; }
+  button.primary { background: transparent; color: var(--text); border-color: var(--text); font-weight: 500; }
   button.primary:hover { opacity: .9; }
-  input, select, textarea { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  input, select, textarea { background: var(--panel); border: 1px solid var(--line); border-radius: 6px;
     padding: 9px 12px; width: 100%; outline: none; }
   input:focus, select:focus, textarea:focus { border-color: #4a4a52; }
 
   .app { display: grid; grid-template-columns: 220px 1fr; height: 100%; }
   aside { border-right: 1px solid var(--line); padding: 28px 18px; display: flex; flex-direction: column; gap: 6px; }
-  .brand { font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
-  .nav button { width: 100%; text-align: left; border: none; padding: 10px 12px; color: var(--muted); }
-  .nav button.active { color: var(--text); background: var(--panel); }
+  .brand { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; font-family: var(--mono); }
+  .nav, .nav-fit { position: relative; display: grid; gap: 10px; }
+  .nav button, .nav-fit button { width: 100%; text-align: center; padding: 11px 14px; font-size: 14px; color: var(--muted); border: 1px solid var(--line); border-radius: 12px; background: none; position: relative; z-index: 1; }
+  .sec-group { margin-top: auto; display: grid; gap: 4px; padding-bottom: 8px; }
+  .sec-group .nav-label { margin: 0 12px 4px; }
+  .sec-link { width: auto; text-align: left; border: none; padding: 6px 12px; color: var(--muted); background: none; font-size: 14px; }
+  .sec-link:hover { background: none; color: var(--text); border: none; }
+  .nav button.active, .nav-fit button.active { color: var(--text); }
+  .nav-ind { position: absolute; left: 0; top: 0; width: 0; height: 0; opacity: 0; pointer-events: none; z-index: 0; clip-path: inset(0 round 12px);
+    border: 1px solid var(--pc); border-radius: 12px; background: color-mix(in srgb, var(--pc) 14%, transparent);
+    transition: transform .45s cubic-bezier(.2,.7,.2,1), width .45s cubic-bezier(.2,.7,.2,1), height .45s cubic-bezier(.2,.7,.2,1), opacity .2s, filter .3s; }
+  .nav-ind.moving { filter: blur(2.5px); clip-path: none; will-change: transform, filter; }
   main { overflow-y: auto; padding: 36px 48px; }
-  h1 { font-size: 46px; font-weight: 700; letter-spacing: -.025em; margin: 0 0 6px;
-    background: linear-gradient(90deg, var(--h1a) 30%, var(--pc)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  h1 { font-size: 46px; font-weight: 500; letter-spacing: -.03em; margin: 0 0 6px; color: var(--text); }
   .sub { color: var(--muted); margin: 0 0 28px; }
   .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 24px; }
   .spacer { flex: 1; }
@@ -65,7 +77,7 @@
   .cal .day:hover { background: var(--panel); }
   .cal .day.other { color: #55555c; }
   .cal .day.today .num { background: var(--accent); color: #0b0b0c; }
-  .cal .num { display: inline-block; min-width: 26px; text-align: center; border-radius: 999px; padding: 2px 4px; font-size: 13px; margin-bottom: 6px; }
+  .cal .num { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; padding: 0; line-height: 1; font-size: 13px; margin-bottom: 6px; }
   .ev { font-size: 12px; padding: 3px 7px; border-radius: 6px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #0b0b0c; }
 
   /* Tareas */
@@ -87,17 +99,27 @@
   .notes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
   .note { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
   .note textarea { min-height: 120px; border: none; background: transparent; padding: 0; resize: vertical; }
+  .note textarea, .note-body { overflow-wrap: anywhere; word-break: break-word; overflow-x: hidden; }
   .note .foot { display: flex; justify-content: flex-end; margin-top: 8px; }
   .note button { font-size: 12px; padding: 4px 10px; }
-
-  /* Asistente */
-  .chat { max-width: 680px; }
-  .log { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; min-height: 260px; margin-bottom: 14px;
-    display: flex; flex-direction: column; gap: 10px; background: var(--panel); }
-  .msg { padding: 10px 14px; border-radius: 12px; max-width: 85%; line-height: 1.45; font-size: 15px; }
-  .msg.me { background: var(--accent); color: #0b0b0c; align-self: flex-end; }
-  .msg.ai { background: var(--bg); border: 1px solid var(--line); align-self: flex-start; }
-  .hint { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  .nsec { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .02em; margin-bottom: 6px; }
+  .nsec:empty { display: none; }
+  .nacts { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .note-box { max-width: 640px; }
+  .note-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .note-top button { font-size: 12px; padding: 4px 10px; }
+  .note-body { width: 100%; min-height: 320px; resize: vertical; line-height: 1.5; font-size: 16px; }
+  .nav-label { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 18px 12px 6px; }
+  /* Gimnasio */
+  .chk { display: flex; align-items: center; gap: 10px; font-size: 15px; cursor: pointer; }
+  .chk input { width: 18px; height: 18px; accent-color: var(--pc); }
+  .gset { display: grid; grid-template-columns: 28px 1fr 1fr auto; gap: 8px; align-items: center; margin-top: 8px; }
+  .gnum { font-family: var(--mono); color: var(--muted); font-size: 13px; }
+  .gex { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .gex > span:first-child { flex: 1; }
+  .gadd { display: grid; grid-template-columns: 1fr 70px 70px auto; gap: 8px; margin-top: 12px; }
+  .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 600px) { .gadd { grid-template-columns: 1fr 1fr; } .form-grid { grid-template-columns: 1fr; } }
 
   /* Modal */
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; padding: 20px; }
@@ -105,15 +127,14 @@
   .modal .box { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; width: 100%; max-width: 420px; display: grid; gap: 12px; }
   .modal h2 { margin: 0; font-size: 22px; }
 
-  .app { background: radial-gradient(1000px 500px at 85% -10%, #1f1838 0%, transparent 60%),
-                     radial-gradient(800px 500px at -10% 110%, #0f2a24 0%, transparent 55%), var(--bg); }
-  .nav button.active { box-shadow: inset 2px 0 0 var(--pc); }
-  .hello { text-transform: capitalize; color: var(--muted); font-size: 14px; letter-spacing: .04em; margin-bottom: 4px; }
+  .app { background: var(--bg); }
+  .hello { text-transform: none; color: var(--muted); font-size: 14px; letter-spacing: .04em; margin-bottom: 4px; }
+  .hello::first-letter { text-transform: uppercase; }
   h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .16em; color: var(--muted); font-weight: 600; margin: 34px 0 12px; }
 
   .progress { display: flex; align-items: center; gap: 14px; margin: 18px 0 8px; color: var(--muted); font-size: 14px; }
   .bar { flex: 1; max-width: 360px; height: 8px; background: var(--panel); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
-  .bar span { display: block; height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--pc), #a8e6cf); transition: width .5s ease; }
+  .bar span { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--text); transition: width .5s ease; }
 
   .habit-check { width: 100%; display: flex; align-items: center; gap: 14px; background: var(--panel); border: 1px solid var(--line);
     border-radius: var(--radius); padding: 14px 16px; text-align: left; margin-bottom: 10px; }
@@ -127,12 +148,14 @@
   .habit-check .streak { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
 
   .habit-form { display: grid; grid-template-columns: 2fr 1.3fr 1.3fr auto; gap: 10px; margin-bottom: 22px; align-items: end; }
+  .habit-form input, .habit-form .tpick select { height: 40px; }
+  .habit-form > * { min-width: 0; }
   .fld { display: grid; gap: 4px; font-size: 12px; color: var(--muted); }
   .tpick { display: flex; gap: 6px; align-items: center; }
   .tpick select { width: auto; flex: 1; min-width: 0; padding: 9px 8px; }
   .tpick .sep { color: var(--muted); font-size: 16px; }
   .habit-check.now { border-color: #5a4a9a; box-shadow: 0 0 0 1px #5a4a9a inset; }
-  .habit-check .tag-now { font-size: 11px; color: #c9b8ff; border: 1px solid #5a4a9a; border-radius: 999px; padding: 2px 8px; }
+  .habit-check .tag-now { font-size: 11px; color: #9281f7; border: 1px solid #5a4a9a; border-radius: 999px; padding: 2px 8px; }
   .days { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; }
   .chip { padding: 6px 12px; font-size: 13px; border-radius: 999px; }
   .chip.on { background: var(--pc); color: #0b0b0c; border-color: var(--pc); }
@@ -157,12 +180,12 @@
   .agenda-row .name { font-size: 16px; font-weight: 600; }
   .agenda-row .sub2 { font-size: 12px; color: var(--muted); margin-top: 3px; }
   .agenda-row.next { border-color: #5a4a9a; box-shadow: 0 0 0 1px #5a4a9a inset; }
-  .agenda-row.next .sub2 { color: #c9b8ff; font-weight: 600; }
+  .agenda-row.next .sub2 { color: #9281f7; font-weight: 600; }
   .agenda-row.past { opacity: .45; }
 
   /* Acceso */
   .auth { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 20px;
-    background: radial-gradient(900px 500px at 80% -10%, #1f1838 0%, transparent 60%), var(--bg); z-index: 50; }
+    background: var(--bg); z-index: 50; }
   .auth.open { display: flex; animation: fade .35s ease; }
   .auth-box { width: 100%; max-width: 360px; display: grid; gap: 12px; background: var(--panel);
     border: 1px solid var(--line); border-radius: 22px; padding: 28px; }
@@ -190,11 +213,9 @@
   .wcol .wnum { display: block; margin: 0 auto 12px; width: 32px; text-align: center; border-radius: 999px; padding: 4px 0;
     font-size: 15px; color: var(--text); }
   .wcol.today .wnum { background: var(--pc); color: #0b0b0c; font-weight: 700; }
-  .wev { font-size: 12px; padding: 7px 9px; border-radius: 10px; margin-bottom: 6px; background: var(--bg);
+  .wev { font-size: 12px; padding: 7px 9px; border-radius: 6px; margin-bottom: 6px; background: var(--bg);
     border: 1px solid var(--line); border-left: 3px solid var(--c, #e8e8ea); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .wev .t { color: var(--muted); margin-right: 4px; }
-  .wtask { font-size: 12px; color: var(--muted); margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .wempty { font-size: 12px; color: #55555c; text-align: center; margin-top: 16px; }
   @media (max-width: 760px) {
     .week { grid-template-columns: repeat(7, minmax(110px, 1fr)); overflow-x: auto; }
   }
@@ -216,10 +237,10 @@
   .tday { position: relative; border-left: 1px solid var(--line); min-width: 0; cursor: pointer;
     background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--line) 33px, var(--line) 34px); }
   .tday:hover { background-color: rgba(255,255,255,.015); }
-  .tblock { position: absolute; left: 4px; right: 4px; border-radius: 10px; padding: 4px 7px; font-size: 12px;
+  .tblock { position: absolute; left: 4px; right: 4px; border-radius: 6px; padding: 4px 7px; font-size: 12px;
     background: var(--c, #e8e8ea); color: #0b0b0c; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; z-index: 1; }
   .tblock .t { opacity: .7; margin-right: 4px; }
-  .thab { position: absolute; left: 4px; right: 4px; border-radius: 10px; padding: 3px 7px; font-size: 11px;
+  .thab { position: absolute; left: 4px; right: 4px; border-radius: 6px; padding: 3px 7px; font-size: 11px;
     border: 1px dashed var(--muted); color: var(--muted); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; z-index: 0; }
   .nowline { position: absolute; left: 0; right: 0; height: 2px; background: var(--pc); z-index: 2; pointer-events: none; }
   .nowline::before { content: ""; position: absolute; left: -4px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--pc); }
@@ -228,7 +249,7 @@
   .yearview { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
   .ymonth { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 12px; }
   .ytitle { border: none; background: none; padding: 4px 4px 10px; font-size: 15px; font-weight: 600; color: var(--text);
-    width: 100%; text-align: left; border-radius: 10px; }
+    width: 100%; text-align: left; border-radius: 6px; }
   .ytitle:hover { background: none; color: var(--pc); }
   .ygrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
   .yh { font-size: 10px; color: var(--muted); padding-bottom: 4px; }
@@ -254,7 +275,7 @@
   /* Burbuja de perfil */
   .pbubble { position: fixed; right: 20px; top: 20px; z-index: 40; display: flex; align-items: center; gap: 10px;
     background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 6px; cursor: pointer;
-    box-shadow: 0 8px 24px rgba(0,0,0,.35); transition: transform .2s; }
+    box-shadow: none; transition: transform .2s; }
   .pbubble.named { padding: 6px 6px 6px 16px; }
   .pbubble:hover { transform: translateY(-2px); background: var(--panel); }
   .pname { font-size: 14px; color: var(--text); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -263,7 +284,7 @@
     place-items: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
 
   /* Configuración */
-  .sfoot { margin-top: auto; display: grid; gap: 6px; }
+  .sfoot { margin-top: 0; display: grid; gap: 6px; }
   .gear { text-align: left; border: none; color: var(--muted); padding: 10px 12px; }
   .gear:hover { color: var(--text); background: var(--panel); }
   .srow { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;
@@ -289,43 +310,6 @@
   body[data-size="small"] { font-size: 14px; }
   body[data-size="large"] { font-size: 18px; }
 
-  /* Amigos */
-  .chk { display: flex; align-items: center; gap: 10px; font-size: 15px; cursor: pointer; }
-  .chk input { width: 18px; height: 18px; accent-color: var(--pc); }
-  .flist { display: grid; gap: 10px; max-width: 640px; }
-  .fcard { display: flex; align-items: center; gap: 14px; background: var(--panel); border: 1px solid var(--line);
-    border-radius: 18px; padding: 12px 14px; flex-wrap: wrap; }
-  .fav { width: 46px; height: 46px; border-radius: 50%; background: var(--pc); color: #0b0b0c; display: grid;
-    place-items: center; font-weight: 700; overflow: hidden; flex-shrink: 0; }
-  .fav img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .finfo { flex: 1; min-width: 0; }
-  .fname { font-weight: 600; }
-  .fcode { font-size: 12px; color: var(--muted); letter-spacing: .08em; }
-  .factions { display: flex; gap: 8px; flex-wrap: wrap; }
-  .factions button { font-size: 13px; padding: 6px 12px; }
-
-  /* Amigos: alineación fija de tarjetas, botones y campo de búsqueda */
-  #friends .flist { max-width: 720px; }
-  #friends .fcard { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 14px; }
-  #friends .factions { justify-content: flex-end; flex-wrap: nowrap; }
-  #friends .factions button { white-space: nowrap; height: 34px; padding: 0 14px; }
-  #friends .goal-add { align-items: stretch; }
-  #friends .goal-add input, #friends .goal-add button { height: 42px; }
-  #friends .goal-add button { white-space: nowrap; padding: 0 18px; }
-  #friends .sub { margin: 0 0 22px; }
-  #friends .fcard + .fcard { margin-top: 0; }
-  @media (max-width: 760px) {
-    #friends .fcard { grid-template-columns: 46px minmax(0, 1fr); }
-    #friends .factions { grid-column: 1 / -1; justify-content: flex-start; }
-  }
-
-  /* Perfil de amigo: que todo quepa dentro del panel */
-  #fDetail { max-width: 720px; box-sizing: border-box; display: grid; gap: 14px; }
-  #fDetail > * { min-width: 0; max-width: 100%; box-sizing: border-box; }
-  #fDetail .fcard { grid-template-columns: 46px minmax(0, 1fr); }
-  #fDetail .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: none; margin: 0; }
-  #fDetail .stat { min-width: 0; }
-  #fDetail > button { width: 100%; margin: 0; }
 
   /* Ajustes para celular */
   @media (max-width: 760px) {
@@ -344,14 +328,12 @@
     .stat .sv { font-size: 22px; }
     .cal .day { min-height: 64px; }
     .srow { flex-direction: column; align-items: flex-start; }
-    .codecard { flex-direction: column; align-items: flex-start; }
-    .fcard { gap: 10px; }
   }
 
   /* Avisos y confirmaciones */
   .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 16px); opacity: 0; z-index: 90;
     background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 999px;
-    padding: 10px 18px; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.35); pointer-events: none;
+    padding: 10px 18px; font-size: 14px; box-shadow: none; pointer-events: none;
     transition: opacity .3s ease, transform .3s ease; max-width: calc(100vw - 32px); text-align: center; }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
   .cbox { max-width: 360px; }
@@ -361,9 +343,6 @@
   :root.light .cbtns .danger { background: #d9534f; border-color: #d9534f; color: #ffffff; }
 
   /* Búsqueda y hábitos por semana */
-  .sres { cursor: pointer; }
-  .sres:hover { border-color: var(--pc); }
-  .sicon { font-size: 18px; }
   .hweek-wrap { margin-bottom: 26px; }
   .hweek-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
   .hweek-nav span { flex: 1; text-align: center; color: var(--muted); font-size: 14px; }
@@ -373,7 +352,7 @@
   .hw-c.today { color: var(--pc); font-weight: 700; }
   .hw-name { justify-content: flex-start; color: var(--text); font-size: 14px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .hw-off { color: #55555c; }
-  .hw-cell { height: 30px; border-radius: 10px; padding: 0; font-size: 13px; background: var(--bg); border: 1px solid var(--line); }
+  .hw-cell { height: 30px; border-radius: 6px; padding: 0; font-size: 13px; background: var(--bg); border: 1px solid var(--line); }
   .hw-cell:hover:not(:disabled) { background: var(--line); }
   .hw-cell.on { background: var(--pc); color: #0b0b0c; border-color: var(--pc); font-weight: 700; }
   .hw-cell.on:hover { background: var(--pc); }
@@ -399,10 +378,6 @@
   .ob-skip { background: none; border: none; color: var(--muted); }
   .ob-skip:hover { color: var(--text); background: none; }
 
-  /* Código de amigo */
-  .codecard { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .codeval { display: flex; gap: 10px; align-items: center; font-weight: 700; font-size: 18px; letter-spacing: .1em; }
-
   /* Perfil ampliado */
   .motto { color: var(--muted); font-style: italic; font-size: 15px; margin: 0 0 4px; }
   .ph-row { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
@@ -427,8 +402,8 @@
   .stat .sv { font-size: 26px; font-weight: 700; }
 
   /* Perfil y personalización */
-  :root { --pc: #c9b8ff; --h1a: #ffffff; }
-  .prof-card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 24px;
+  :root { --pc: #9281f7; --h1a: #ffffff; }
+  .prof-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 24px;
     display: grid; gap: 20px; max-width: 520px; }
   .swatches { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
   .swatch { width: 38px; height: 38px; border-radius: 50%; border: 2px solid transparent; padding: 0; cursor: pointer;
@@ -444,9 +419,8 @@
   .tpick select { border-radius: 12px; }
   .cal { border-radius: 22px; }
   .ev { border-radius: 999px; padding: 3px 10px; }
-  .task, .note, .log, .habit-check, .habit-row, .modal .box, .chip { border-radius: 20px; }
+  .task, .note, .habit-check, .habit-row, .modal .box, .chip { border-radius: 16px; }
   .chip { border-radius: 999px; }
-  .msg { border-radius: 18px; }
   .bar, .bar span { border-radius: 999px; }
 
   @media (max-width: 760px) {
@@ -487,14 +461,13 @@
     .hw-name { font-size: 13px; }
     .days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
     .days .chip { padding: 8px 0; font-size: 12px; text-align: center; min-width: 0; }
-    #friends .goal-add input { height: 46px; padding: 0 14px; line-height: 46px; }
-    #friends .goal-add button { height: 46px; }
 
     body.m-home .m-hello { display: block; margin: 4px 0 20px; animation: menuIn .5s ease .05s both; }
-    .m-date { font-size: 13px; color: var(--pc); font-weight: 600; text-transform: capitalize; letter-spacing: .04em; }
+    .m-date { font-size: 13px; color: var(--pc); font-weight: 600; text-transform: none; letter-spacing: .04em; }
+    .m-date::first-letter { text-transform: uppercase; }
     .m-greet {
       font-size: 28px; font-weight: 700; line-height: 1.15; margin: 4px 0 6px; letter-spacing: -.02em;
-      background: linear-gradient(90deg, var(--h1a) 30%, var(--pc)); -webkit-background-clip: text; background-clip: text; color: transparent;
+      color: var(--text);
     }
     .m-motto { color: var(--muted); font-style: italic; font-size: 14px; margin: 0 0 12px; }
     .m-motto:empty { display: none; }
@@ -586,6 +559,23 @@
     body:not(.m-home) main { display: block; }
     .pbubble { top: 14px; right: 14px; }
   }
+  body.in-fit .nav-main { display: none; }
+  body:not(.in-fit) .nav-fit { display: none; }
+  body.in-fit .nav-fit { display: grid; gap: 6px; }
+  .quick-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .gfood { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
+  .gfood-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
+  .days-pick { display: flex; gap: 6px; flex-wrap: wrap; }
+  .gex-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  /* Controles: mismo radio, letra y alto en toda la app (los chips redondos conservan su forma) */
+  :root { --ctl-r: 12px; }
+  button, input:not([type="checkbox"]):not([type="radio"]), select, textarea, .filebtn { border-radius: var(--ctl-r); }
+  button, input, select, textarea { font-size: 14px; }
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea { min-height: 40px; }
+  button.primary, button.ghost, .gadd-btn, .toolbar button, .gear, .logout { min-height: 40px; }
+  .filebtn { padding: 10px 14px; }
+  .logout { font-size: 14px; }
+  .hweek-nav button { min-height: 40px; }
 </style>
 </head>
 <body class="m-home">
@@ -598,16 +588,25 @@
       <p class="m-motto" id="mMotto"></p>
       <span class="m-sum" id="mSum"></span>
     </div>
-    <nav class="nav">
+    <nav class="nav nav-main">
       <button class="active" data-view="today">Hoy</button>
       <button data-view="calendar">Calendario</button>
       <button data-view="habits">Hábitos</button>
       <button data-view="tasks">Tareas</button>
       <button data-view="notes">Notas</button>
-      <button data-view="search">Buscar</button>
-      <button data-view="friends">Amigos</button>
-      <button data-view="assistant">Asistente</button>
     </nav>
+    <nav class="nav-fit">
+      <button class="active" data-tab="summary">Resumen</button>
+      <button data-tab="train">Entrenar</button>
+      <button data-tab="routines">Rutinas</button>
+      <button data-tab="progress">Progreso</button>
+      <button data-tab="measures">Medidas</button>
+      <button data-tab="food">Comidas</button>
+    </nav>
+    <div class="sec-group">
+      <div class="nav-label">Secciones</div>
+      <button id="goFit" class="sec-link">Fit</button>
+    </div>
     <div class="sfoot">
       <div class="m-row">
         <button class="m-prof-home" id="mProfHome">👤 Perfil</button>
@@ -701,11 +700,22 @@
     <section class="view" id="notes">
       <h1>Notas</h1>
       <p class="sub">Ideas y recordatorios rápidos.</p>
-      <div class="toolbar"><button class="primary" id="addNote">+ Nota</button></div>
+      <div class="toolbar"><button class="primary" id="addNote">+ Nota</button>
+        <input id="secName" maxlength="30" placeholder="Nombre de sección" style="max-width:220px">
+        <button id="secAdd">+ Sección</button></div>
+      <div class="toolbar" id="secBar" style="margin-bottom:16px"></div>
       <div class="notes" id="noteList"></div>
     </section>
 
+
     <!-- CONFIGURACIÓN -->
+    <!-- FIT -->
+    <section class="view" id="gym">
+      <h1>Fit</h1>
+      <p class="sub">Rutinas, entrenos, comidas, progreso y medidas.</p>
+      <div id="gymBody"></div>
+    </section>
+
     <section class="view" id="settings">
       <h1>Configuración</h1>
       <p class="sub">Ajustes de la página. Se guardan en este navegador.</p>
@@ -729,16 +739,6 @@
             <button data-size="small">Pequeño</button>
             <button data-size="normal">Normal</button>
             <button data-size="large">Grande</button>
-          </div>
-        </div>
-        <div class="srow">
-          <div>
-            <div class="slabel">Idioma</div>
-            <div class="sdesc">Idioma de la página.</div>
-          </div>
-          <div class="seg" id="setLang">
-            <button data-lang="es">Español</button>
-            <button data-lang="en">English</button>
           </div>
         </div>
         <div class="srow">
@@ -786,16 +786,6 @@
     <section class="view" id="profile">
       <h1>Perfil</h1>
       <p class="sub">Tu nombre y el color que se usa en la página.</p>
-      <div class="prof-card codecard">
-        <div>
-          <div class="slabel">Tu código de amigo</div>
-          <div class="sdesc">Compártelo para que te agreguen.</div>
-        </div>
-        <div class="codeval">
-          <span id="pCode">—</span>
-          <button id="pCopy">Copiar</button>
-        </div>
-      </div>
       <div class="prof-card">
         <label class="fld">Nombre
           <input id="pName" placeholder="¿Cómo te llamas?" maxlength="30">
@@ -831,12 +821,6 @@
           <span class="saved" id="pSavedMore"></span>
         </div>
       </div>
-      <div class="prof-card">
-        <div class="slabel">Privacidad para amigos</div>
-        <div class="sdesc">Tu nombre y tu código siempre se ven. Elige lo demás:</div>
-        <label class="chk"><input type="checkbox" id="shPhoto"> Compartir foto</label>
-        <label class="chk"><input type="checkbox" id="shStats"> Compartir estadísticas</label>
-      </div>
       <h2>Metas del mes</h2>
       <div class="prof-card" id="goalsCard"></div>
       <h2>Estadísticas</h2>
@@ -848,51 +832,6 @@
       </div>
     </section>
 
-    <!-- BUSCAR -->
-    <section class="view" id="search">
-      <h1>Buscar</h1>
-      <p class="sub">Encuentra eventos, tareas, notas y hábitos desde un solo campo.</p>
-      <div class="prof-card" style="max-width:none">
-        <input id="sQuery" placeholder="Escribe algo, por ejemplo: dentista">
-      </div>
-      <div class="flist" id="sResults" style="max-width:none; margin-top:16px"></div>
-    </section>
-
-    <!-- AMIGOS -->
-    <section class="view" id="friends">
-      <h1>Amigos</h1>
-      <p class="sub">Agrega amigos con su código o su correo, y mira sus estadísticas si las comparten.</p>
-      <div class="prof-card">
-        <div class="slabel">Agregar amigo</div>
-        <div class="goal-add">
-          <input id="fAdd" maxlength="60" placeholder="Código OV-XXXX o correo">
-          <button class="primary" id="fAddBtn">Enviar</button>
-        </div>
-        <span class="saved" id="fMsg"></span>
-      </div>
-      <h2>Solicitudes recibidas</h2>
-      <div class="flist" id="fRequests"></div>
-      <h2>Solicitudes enviadas</h2>
-      <div class="flist" id="fOutgoing"></div>
-      <h2>Mis amigos</h2>
-      <div class="flist" id="fFriends"></div>
-      <div class="prof-card" id="fDetail" style="display:none; margin-top:20px"></div>
-    </section>
-
-    <!-- ASISTENTE -->
-    <section class="view" id="assistant">
-      <h1>Asistente</h1>
-      <p class="sub">Escribe en lenguaje natural.</p>
-      <div class="chat">
-        <div class="log" id="log"></div>
-        <div class="form wide" style="grid-template-columns: 1fr auto; margin:0">
-          <input id="aiInput" placeholder="Ej: agenda dentista 2026-10-20 10:00">
-          <button class="primary" id="aiSend">Enviar</button>
-        </div>
-        <p class="hint">Comandos: "agenda [título] [AAAA-MM-DD] [HH:MM]", "pendientes", "ayuda".
-          Puedes escribir en lenguaje natural, por ejemplo: "agenda gym los martes a las 7" o "¿qué tengo hoy?".</p>
-      </div>
-    </section>
   </main>
 </div>
 
@@ -955,11 +894,24 @@
   </div>
 </div>
 
+<!-- Nota abierta -->
+<div class="modal" id="noteModal">
+  <div class="box note-box">
+    <div class="note-top">
+      <span class="slabel">Nota</span>
+      <button type="button" id="noteCopy">Copiar</button>
+    </div>
+    <div class="fld">Sección<select id="noteSection"></select></div>
+    <textarea id="noteBody" class="note-body" placeholder="Escribe tu nota…"></textarea>
+    <div class="toolbar" style="margin:0"><button class="primary" id="noteClose">Cerrar</button></div>
+  </div>
+</div>
+
 <script>
 (function () {
   // ---------- Almacenamiento local (sin cuentas por ahora) ----------
   const TOKEN_KEY = "ov-token";
-  const empty = { events: [], tasks: [], notes: [], habits: [] };
+  const empty = { events: [], tasks: [], notes: [], habits: [], sections: [], routines: [], workouts: [], measures: [], meals: [] };
   let data = { ...empty };
   let token = localStorage.getItem(TOKEN_KEY) || ""; // la sesión se recuerda en este navegador
   let saveTimer = null;
@@ -979,7 +931,12 @@
     }
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => {
-      fetch("/api/data", { method: "PUT", headers: authHeaders(), body: JSON.stringify({ ...data, stats: computeStats() }) })
+      fetch("/api/data", { headers: authHeaders() })
+        .then(r => (r.ok ? r.json() : null))
+        .then(latest => {
+          const body = { ...data, stats: computeStats() };
+          return fetch("/api/data", { method: "PUT", headers: authHeaders(), body: JSON.stringify(body) });
+        })
         .catch(() => { /* sin conexión: se reintentará con el siguiente cambio */ });
     }, 400);
   }
@@ -1050,14 +1007,14 @@
 
   // ---------- Navegación ----------
   const views = document.querySelectorAll(".view");
-  document.querySelectorAll(".nav button").forEach(btn => {
+  document.querySelectorAll(".nav-main button").forEach(btn => {
     btn.addEventListener("click", () => {
       document.body.classList.remove("m-home");
+      setFit(false);
       document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b === btn));
       views.forEach(v => v.classList.toggle("active", v.id === btn.dataset.view));
       if (btn.dataset.view === "today") renderToday();
       if (btn.dataset.view === "profile") renderProfileExtras();
-      if (btn.dataset.view === "friends") loadFriends();
       if (btn.dataset.view === "habits") renderHabitWeek();
     });
   });
@@ -1419,15 +1376,20 @@
   document.getElementById("viewGrid").onclick = () => { taskView = "grid"; renderTasks(); };
 
   // ---------- Notas ----------
+  // Filtro de secciones: "__all__" = Todas, "__none__" = Sin sección, o el nombre de una sección
+  let noteFilter = "__all__";
   const NOTE_COLORS = ["", "#c9b8ff", "#a8e6cf", "#ffd6a5", "#ffadad", "#9ad0ff", "#ffe08a", "#f5a3d6"];
   function renderNotes() {
     const list = document.getElementById("noteList");
     list.innerHTML = "";
-    data.notes.forEach(n => {
+    renderNoteSections();
+    const shown = data.notes.filter(n => noteFilter === "__all__" || (n.section || "") === (noteFilter === "__none__" ? "" : noteFilter));
+    shown.forEach(n => {
       const card = document.createElement("div");
       card.className = "note" + (n.color ? " colored" : "");
       if (n.color) card.style.background = n.color;
-      card.innerHTML = '<textarea></textarea><div class="foot"><div class="ncolors"></div><button class="ndel">Borrar</button></div>';
+      card.innerHTML = '<div class="nsec"></div><textarea></textarea><div class="foot"><div class="ncolors"></div><div class="nacts"><button class="nopen">Abrir</button><button class="ncopy">Copiar</button><button class="ndel">Borrar</button></div></div>';
+      card.querySelector(".nsec").textContent = n.section || "";
       const ta = card.querySelector("textarea");
       ta.value = n.text;
       ta.addEventListener("input", () => { n.text = ta.value; save(); });
@@ -1443,6 +1405,8 @@
         dots.appendChild(b);
       });
 
+      card.querySelector(".nopen").onclick = () => openNote(n);
+      card.querySelector(".ncopy").onclick = () => copyNote(n.text);
       card.querySelector(".ndel").onclick = async () => {
         const preview = (n.text || "").trim().slice(0, 40);
         const label = preview ? '"' + preview + (n.text.length > 40 ? "…" : "") + '"' : "esta nota vacía";
@@ -1452,107 +1416,120 @@
       list.appendChild(card);
     });
     if (!data.notes.length) list.innerHTML = '<p class="sub">Sin notas todavía.</p>';
+    else if (!shown.length) list.innerHTML = '<p class="sub">Sin notas en esta sección.</p>';
   }
-  document.getElementById("addNote").onclick = () => { data.notes.unshift({ id: uid(), text: "" }); save(); renderNotes(); };
+  document.getElementById("addNote").onclick = () => { data.notes.unshift({ id: uid(), text: "", section: currentSection() }); save(); renderNotes(); };
 
-  // ---------- Asistente (local, por reglas) ----------
-  const log = document.getElementById("log");
-  function bubble(text, who) {
-    const m = document.createElement("div");
-    m.className = "msg " + who;
-    m.textContent = text;
-    log.appendChild(m);
-    log.scrollTop = log.scrollHeight;
+  // Secciones de notas
+  function allSections() {
+    const set = new Set([...(data.sections || []), ...data.notes.map(n => n.section || "").filter(Boolean)]);
+    return [...set].sort((a, b) => a.localeCompare(b, "es"));
   }
-  function assistant(input) {
-    const text = input.trim();
-    const lower = text.toLowerCase();
-    if (lower === "ayuda") {
-      return 'Puedo: "agenda [título] [AAAA-MM-DD] [HH:MM]" para crear un evento, o "pendientes" para ver tus tareas abiertas.';
-    }
-    if (lower === "pendientes") {
-      const open = data.tasks.filter(t => !t.done);
-      return open.length ? "Tienes " + open.length + " pendientes: " + open.map(t => t.title).join(", ") + "." : "No tienes pendientes. ¡Buen trabajo!";
-    }
-    const m = text.match(/^agenda\s+(.+?)\s+(\d{4}-\d{2}-\d{2})(?:\s+(\d{1,2}:\d{2}))?$/i);
-    if (m) {
-      data.events.push({ id: uid(), title: m[1], date: m[2], time: m[3] || "", color: AREA_COLORS.Personal });
-      save(); renderCalendar();
-      return `Listo: "${m[1]}" agendado el ${m[2]}${m[3] ? " a las " + m[3] : ""}.`;
-    }
-    return 'No entendí. Escribe "ayuda" para ver los comandos disponibles.';
+  function currentSection() {
+    return noteFilter === "__all__" || noteFilter === "__none__" ? "" : noteFilter;
   }
-  // Aplica lo que decide la IA: crear eventos, tareas o hábitos
-  function applyActions(actions) {
-    let changed = false;
-    actions.forEach(a => {
-      if (a.type === "add_event" && a.title && a.date) {
-        data.events.push({ id: uid(), title: a.title, date: a.date, time: a.time || "", color: AREA_COLORS.Personal });
-        changed = true;
-      } else if (a.type === "add_task" && a.title) {
-        data.tasks.push({
-          id: uid(), title: a.title,
-          area: AREA_COLORS[a.area] ? a.area : "Personal",
-          date: a.date || "",
-          priority: ["alta", "media", "baja"].includes(a.priority) ? a.priority : "media",
-          done: false
-        });
-        changed = true;
-      } else if (a.type === "add_habit" && a.title && Array.isArray(a.days) && a.days.length) {
-        data.habits.push({
-          id: uid(), title: a.title, time: a.time || "", end: a.end || "",
-          days: a.days.filter(d => Number.isInteger(d) && d >= 0 && d <= 6), logs: {}
-        });
-        changed = true;
-      }
+  function renderNoteSections() {
+    const bar = document.getElementById("secBar");
+    bar.innerHTML = "";
+    const chip = (label, value) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip" + (noteFilter === value ? " on" : "");
+      b.textContent = label;
+      b.onclick = () => { noteFilter = value; renderNotes(); };
+      bar.appendChild(b);
+    };
+    chip("Todas", "__all__");
+    allSections().forEach(s => chip(s, s));
+    if (data.notes.some(n => !n.section)) chip("Sin sección", "__none__");
+    if (currentSection()) {
+      const del = document.createElement("button");
+      del.type = "button";
+      del.className = "chip";
+      del.textContent = "Borrar sección";
+      del.onclick = async () => {
+        if (!(await askConfirm('¿Borrar la sección "' + noteFilter + '"? Sus notas no se borran, pasan a "Sin sección".'))) return;
+        data.notes.forEach(n => { if (n.section === noteFilter) n.section = ""; });
+        data.sections = (data.sections || []).filter(x => x !== noteFilter);
+        noteFilter = "__all__"; save(); renderNotes();
+      };
+      bar.appendChild(del);
+    }
+  }
+  function addSection() {
+    const input = document.getElementById("secName");
+    const name = input.value.trim().replace(/\s+/g, " ").slice(0, 30);
+    if (!name) { toast("Escribe un nombre para la sección."); return; }
+    const low = name.toLowerCase();
+    if (allSections().some(x => x.toLowerCase() === low) || low === "todas" || low === "sin sección") {
+      toast("Ya existe una sección con ese nombre."); return;
+    }
+    data.sections = [...(data.sections || []), name];
+    noteFilter = name; input.value = ""; save(); renderNotes();
+  }
+  document.getElementById("secAdd").onclick = addSection;
+
+  document.getElementById("goFit").onclick = () => goScreen(document.body.classList.contains("in-fit") ? "today" : "gym", true);
+
+  document.getElementById("secName").addEventListener("keydown", e => { if (e.key === "Enter") addSection(); });
+
+  // Nota abierta: se lee y edita en una ventana propia
+  let openedNote = null;
+  const noteModal = document.getElementById("noteModal");
+  const noteBody = document.getElementById("noteBody");
+  function openNote(n) {
+    openedNote = n;
+    noteBody.value = n.text || "";
+    fillNoteSection(n);
+    noteModal.classList.add("open");
+    noteBody.focus();
+  }
+  function fillNoteSection(n) {
+    const sel = document.getElementById("noteSection");
+    sel.innerHTML = "";
+    [["", "Sin sección"]].concat(allSections().map(x => [x, x])).forEach(([v, t]) => {
+      const o = document.createElement("option");
+      o.value = v; o.textContent = t; sel.appendChild(o);
     });
-    if (changed) { save(); renderEverything(); }
+    sel.value = n.section || "";
   }
+  document.getElementById("noteSection").onchange = e => {
+    if (!openedNote) return;
+    openedNote.section = e.target.value; save();
+  };
+  function closeNote() {
+    noteModal.classList.remove("open");
+    openedNote = null;
+    renderNotes();
+  }
+  noteBody.addEventListener("input", () => {
+    if (!openedNote) return;
+    openedNote.text = noteBody.value; save();
+  });
+  document.getElementById("noteClose").onclick = closeNote;
+  noteModal.addEventListener("click", e => { if (e.target === noteModal) closeNote(); });
+  document.getElementById("noteCopy").onclick = () => copyNote(noteBody.value);
 
-  async function sendAI() {
-    const input = document.getElementById("aiInput");
-    const text = input.value.trim();
-    if (!text) return;
-    bubble(text, "me");
-    input.value = "";
-
-    const thinking = document.createElement("div");
-    thinking.className = "msg ai";
-    thinking.textContent = "Pensando…";
-    log.appendChild(thinking);
-    log.scrollTop = log.scrollHeight;
-
-    try {
-      const res = await fetch("/api/ai", {
-        method: "POST",
-        headers: authHeaders(),
-        body: JSON.stringify({ message: text, today: iso(new Date()), data, lang })
-      });
-      const body = await res.json().catch(() => ({}));
-      thinking.remove();
-      if (!res.ok) { bubble(body.error || ("No pude responder (código " + res.status + ")."), "ai"); return; }
-      bubble(body.reply || "Listo.", "ai");
-      applyActions(body.actions || []);
-    } catch (e) {
-      // Sin conexión con la IA: usamos los comandos locales como respaldo
-      thinking.remove();
-      bubble(assistant(text), "ai");
+  // Copia rápida al portapapeles; si el navegador no deja usar la API, usa un respaldo
+  function copyNote(text) {
+    if (!(text || "").trim()) { toast("La nota está vacía."); return; }
+    const fallback = () => {
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) {}
+      ta.remove();
+      toast(ok ? "Nota copiada." : "No se pudo copiar.");
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => toast("Nota copiada."), fallback);
+    } else {
+      fallback();
     }
   }
-  document.getElementById("aiSend").onclick = sendAI;
-  document.getElementById("aiInput").addEventListener("keydown", e => { if (e.key === "Enter") sendAI(); });
-  bubble('Hola. Escribe "ayuda" para ver lo que puedo hacer.', "ai");
 
   // ---------- Hora escrita (HH:MM) ----------
-  // Acepta "830", "8:30", "08:30", "9", "1405". Devuelve "HH:MM", "" si está vacío, o null si no es válida.
-  function parseTime(s) {
-    const d = (s || "").replace(/\D/g, "");
-    if (!d) return "";
-    const h = d.length <= 2 ? +d : +d.slice(0, -2);
-    const m = d.length <= 2 ? 0 : +d.slice(-2);
-    if (h > 23 || m > 59) return null;
-    return pad(h) + ":" + pad(m);
-  }
   // Selector de hora con dos apartados: horas y minutos. get() devuelve "HH:MM", "" si está vacío, o null si está a medias.
   function timePicker(box) {
     const h = document.createElement("select");
@@ -1962,74 +1939,9 @@
     settings.showHabits = e.target.checked; saveSettings(); renderCalendar();
   };
   const remPicker = timePicker(document.getElementById("remTimeBox"));
-  document.getElementById("openSettings").onclick = () => {
-    document.body.classList.remove("m-home");
-    document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-    views.forEach(v => v.classList.toggle("active", v.id === "settings"));
-  };
   applySettings();
 
-  // ---------- Búsqueda, exportación, recordatorio y hábitos por semana ----------
-  function goView(v) {
-    document.body.classList.remove("m-home");
-    document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.view === v));
-    views.forEach(x => x.classList.toggle("active", x.id === v));
-    if (v === "today") renderToday();
-    if (v === "habits") renderHabitWeek();
-    if (v === "friends") loadFriends();
-    if (v === "calendar") renderCalendar();
-  }
-
-  // Búsqueda
-  const sQuery = document.getElementById("sQuery");
-  function renderSearch() {
-    const q = sQuery.value.trim().toLowerCase();
-    const box = document.getElementById("sResults");
-    box.innerHTML = "";
-    if (!q) {
-      const p = document.createElement("p");
-      p.className = "sub"; p.style.margin = "0";
-      p.textContent = "Escribe para buscar.";
-      box.appendChild(p);
-      return;
-    }
-    const hits = [];
-    data.events.filter(e => (e.title || "").toLowerCase().includes(q)).forEach(e => hits.push({
-      icon: "📅", type: "Evento", label: e.title, sub: e.date + (e.time ? " · " + e.time : ""),
-      go: () => { goView("calendar"); setCalView("day", new Date(e.date + "T00:00")); }
-    }));
-    data.tasks.filter(t => (t.title || "").toLowerCase().includes(q)).forEach(t => hits.push({
-      icon: "☐", type: "Tarea", label: t.title, sub: t.area + (t.date ? " · " + t.date : ""),
-      go: () => goView("tasks")
-    }));
-    data.notes.filter(n => (n.text || "").toLowerCase().includes(q)).forEach(n => hits.push({
-      icon: "📝", type: "Nota", label: (n.text || "").trim().slice(0, 60) || "Nota vacía", sub: "",
-      go: () => goView("notes")
-    }));
-    data.habits.filter(h => (h.title || "").toLowerCase().includes(q)).forEach(h => hits.push({
-      icon: "🔁", type: "Hábito", label: h.title, sub: daysLabel(h.days),
-      go: () => goView("habits")
-    }));
-    if (!hits.length) {
-      const p = document.createElement("p");
-      p.className = "sub"; p.style.margin = "0";
-      p.textContent = "Sin resultados para \"" + sQuery.value.trim() + "\".";
-      box.appendChild(p);
-      return;
-    }
-    hits.slice(0, 50).forEach(hit => {
-      const el = document.createElement("div");
-      el.className = "fcard sres";
-      el.innerHTML = '<div class="fav sicon"></div><div class="finfo"><div class="fname"></div><div class="fcode"></div></div>';
-      el.querySelector(".sicon").textContent = hit.icon;
-      el.querySelector(".fname").textContent = hit.label;
-      el.querySelector(".fcode").textContent = hit.type + (hit.sub ? " · " + hit.sub : "");
-      el.onclick = hit.go;
-      box.appendChild(el);
-    });
-  }
-  sQuery.addEventListener("input", renderSearch);
-
+  // ---------- Recordatorio y hábitos por semana ----------
   // Hábitos por semana: cuadrícula de días marcables
   let hwOffset = 0;
   function cellDiv(cls, text) {
@@ -2305,16 +2217,6 @@
         }
       },
       {
-        title: "Idioma",
-        q: "¿En qué idioma quieres la página?",
-        render() {
-          body.appendChild(options([["es", "Español"], ["en", "English"]], ob.lang, v => {
-            ob.lang = v;
-            setLanguage(v);
-          }));
-        }
-      },
-      {
         title: "Tu día a día",
         q: "¿Cómo describirías tu rutina?",
         render() {
@@ -2393,7 +2295,6 @@
       profile.onboarded = true;
       saveProfile();
       settings.theme = ob.theme;
-      settings.lang = ob.lang;
       settings.reminder.on = ob.remOn;
       if (picker && picker.get()) settings.reminder.time = picker.get();
       saveSettings();
@@ -2421,200 +2322,29 @@
     show();
   }
 
-  // ---------- Idioma (español / English) ----------
-  // Diccionario: clave = texto en español tal como aparece; valor = traducción.
-  const EN = {
-    "Ej: Ir al gym, leer 20 min, tomar agua": "E.g. Go to the gym, read 20 min, drink water",
-    "Ej: agenda dentista 2026-10-20 10:00": "E.g. dentist appointment 2026-10-20 10:00",
-    "Ej. Un día a la vez": "E.g. One day at a time",
-    "Contraseña (mín. 6 caracteres)": "Password (min. 6 characters)",
-    "Nueva meta, por ejemplo: correr 5 km": "New goal, for example: run 5 km",
-    "Nueva tarea": "New task",
-    "Título": "Title",
-    "¿Cómo te llamas?": "What is your name?",
-    "Tu nombre": "Your name",
-    "Nombre del hábito": "Habit name",
-
-    "Acciones que se repiten. Elige los días y aparecerán en Hoy cada semana.": "Recurring actions. Choose the days and they will appear in Today every week.",
-    "Haz clic en un día para agregar un evento.": "Click a day to add an event.",
-    "Pendientes con fecha y área.": "Pending tasks with date and area.",
-    "Ideas y recordatorios rápidos.": "Quick ideas and reminders.",
-    "Tu nombre y el color que se usa en la página.": "Your name and the color used on the page.",
-    "Agrega amigos con su código o su correo, y mira sus estadísticas si las comparten.": "Add friends with their code or email, and see their statistics if they share them.",
-    "Escribe en lenguaje natural.": "Write in natural language.",
-    "Sin tareas todavía.": "No tasks yet.",
-    "Aún no tienes hábitos. Agrega el primero arriba.": "You have no habits yet. Add the first one above.",
-    "No hay hábitos programados para hoy.": "No habits scheduled for today.",
-    "Sin tareas para hoy.": "No tasks for today.",
-    "Cambiar foto": "Change photo",
-    "Elegir foto": "Choose photo",
-    "Copiado": "Copied",
-    "Copiar": "Copy",
-    "En curso": "In progress",
-    "Enviando…": "Sending…",
-    "Esta persona decidió no compartir sus estadísticas.": "This person chose not to share their statistics.",
-    "Guardado": "Saved",
-    "No hay conexión con el servidor. Intenta de nuevo.": "No connection to the server. Try again.",
-    "No hay conexión con el servidor.": "No connection to the server.",
-    "Pensando…": "Thinking…",
-    "Prioridad ": "Priority ",
-    "Sin resultados para ": "No results for ",
-    "Tarea": "Task",
-    "⚙ Configuración": "⚙ Settings",
-    "⚙ Configuración ": "⚙ Settings ",
-
-    "Solo este día": "Only this day", "Toda la serie": "Whole series",
-    "Hoy": "Today", "Calendario": "Calendar", "Hábitos": "Habits", "Tareas": "Tasks", "Notas": "Notes",
-    "Buscar": "Search", "Amigos": "Friends", "Asistente": "Assistant", "Perfil": "Profile",
-    "Configuración": "Settings", "Cerrar sesión": "Log out", "Mi organización": "My organization",
-    "Mes": "Month", "Semana": "Week", "Día": "Day", "Año": "Year", "+ Evento": "+ Event",
-    "Guardar": "Save", "Guardar nombre": "Save name", "Cancelar": "Cancel", "Eliminar": "Delete",
-    "Agregar": "Add", "Enviar": "Send", "Aceptar": "Accept", "Rechazar": "Decline", "Ver perfil": "View profile",
-    "Siguiente": "Next", "Omitir": "Skip", "Empezar": "Start", "Copiar": "Copy", "Copiado": "Copied",
-    "Hábitos de hoy": "Today's habits", "Agenda": "Agenda", "Tareas para hoy": "Tasks for today",
-    "Nada agendado hoy.": "Nothing scheduled today.", "Sin tareas para hoy.": "No tasks for today.",
-    "Sin notas todavía.": "No notes yet.", "Sin resultados": "No results",
-    "Tema": "Theme", "Oscuro": "Dark", "Claro": "Light", "Tamaño de texto": "Text size",
-    "Pequeño": "Small", "Normal": "Normal", "Grande": "Large", "Color de acento": "Accent color",
-    "Mostrar hábitos en la vista de horas": "Show habits in the time view",
-    "Recordatorio diario": "Daily reminder", "Exportar mis datos": "Export my data", "Exportar": "Export",
-    "Importar datos": "Import data", "Elegir archivo": "Choose file", "Idioma": "Language",
-    "Idioma de la página": "Page language", "Español": "Español", "English": "English",
-    "Sí": "Yes", "No": "No", "Nombre": "Name", "Frase personal": "Personal motto", "Cumpleaños": "Birthday",
-    "Ocupación": "Occupation", "Estudiante": "Student", "Trabajo": "Work", "Casa": "Home",
-    "Metas del mes": "Monthly goals", "Estadísticas": "Statistics", "Privacidad para amigos": "Privacy for friends",
-    "Compartir foto": "Share photo", "Compartir estadísticas": "Share statistics", "Subir foto": "Upload photo",
-    "Quitar foto": "Remove photo", "Quitar": "Remove", "Tu código de amigo": "Your friend code",
-    "Código OV-XXXX o correo": "Code OV-XXXX or email", "Solicitudes recibidas": "Requests received",
-    "Solicitudes enviadas": "Requests sent", "Mis amigos": "My friends", "Agregar amigo": "Add friend",
-    "Vista previa": "Preview", "Eliminar amigo": "Delete friend", "Cerrar": "Close",
-    "Escribe para buscar.": "Type to search.", "Eventos": "Events", "Tarea": "Task", "Nota": "Note",
-    "Evento": "Event", "Hábito": "Habit", "Nueva meta": "New goal", "Objetivo": "Goal",
-    "Recordatorio": "Reminder", "Exportar datos": "Export data", "Importar": "Import",
-    "¡Bienvenida!": "Welcome!", "¿Cómo te llamas?": "What is your name?", "Tu foto": "Your photo",
-    "Tu día a día": "Your routine", "Apariencia": "Appearance", "Listo": "Done",
-    "¿Qué tema prefieres?": "Which theme do you prefer?", "Tu nombre": "Your name",
-    "Escribe algo, por ejemplo: dentista": "Type something, for example: dentist",
-    "Encuentra eventos, tareas, notas y hábitos desde un solo campo.": "Find events, tasks, notes and habits in one place.",
-    "Aún no tienes hábitos para mostrar.": "You have no habits to show yet.",
-    "Aún no tienes amigos. Agrega a alguien con su código.": "You have no friends yet. Add someone with their code.",
-    "Aún no tienes metas. Agrega la primera abajo.": "You have no goals yet. Add the first one below.",
-    "Entrar": "Log in", "Registrarme": "Sign up", "Inicia sesión": "Log in", "Crea tu cuenta": "Create your account",
-    "¿No tienes cuenta? Regístrate": "No account? Sign up", "¿Ya tienes cuenta? Inicia sesión": "Already have an account? Log in",
-    "Correo": "Email", "Contraseña": "Password", "Regístrate": "Sign up",
-    "Buenos días": "Good morning", "Buenas tardes": "Good afternoon", "Buenas noches": "Good evening",
-    "Hora (opcional)": "Time (optional)", "Inicio": "Start", "Fin": "End", "Nuevo evento": "New event",
-    "Título": "Title", "Guardado": "Saved", "Eliminar evento": "Delete event", "Nueva tarea": "New task",
-    "Área": "Area", "Prioridad": "Priority", "Alta": "High", "Media": "Medium", "Baja": "Low",
-    "Lista": "List", "Cuadrícula": "Grid", "Nueva nota": "New note", "Agregar hábito": "Add habit",
-    "Editar": "Edit", "Editar hábito": "Edit habit", "Nombre del hábito": "Habit name", "Guardar cambios": "Save changes",
-    "Ajustes de la página. Se guardan en este navegador.": "Page settings. Saved in this browser.",
-    "Escribe algo": "Type something", "Buscar en mi organización": "Search my organization",
-    "Trabajo": "Work", "Salud": "Health", "Casa": "Home", "Personal": "Personal",
-    "Oscuro o claro.": "Dark or light.",
-    "Ajusta las letras de toda la página.": "Adjusts the text across the whole page.",
-    "Idioma de la página.": "Page language.",
-    "Botones, progreso y detalles de la página.": "Buttons, progress and page details.",
-    "Aparecen como bloques punteados en Día y Semana.": "Shown as dashed blocks in Day and Week.",
-    "Te avisa a la hora elegida si tienes hábitos pendientes. Funciona mientras la página esté abierta.": "Reminds you at the chosen time if you have pending habits. Works while the page is open.",
-    "Descarga tus hábitos, eventos, tareas y notas en un archivo.": "Download your habits, events, tasks and notes as a file.",
-    "Carga un archivo exportado antes. Reemplaza tus datos actuales.": "Load a previously exported file. It replaces your current data.",
-    "Compártelo para que te agreguen.": "Share it so others can add you.",
-    "Tu nombre y tu código siempre se ven. Elige lo demás:": "Your name and code are always visible. Choose the rest:",
-    "Sube una foto para tu burbuja de perfil. Puedes omitir este paso.": "Upload a photo for your profile bubble. You can skip this step.",
-    "¿En qué idioma quieres la página?": "Which language do you want the page in?",
-    "¿Cómo describirías tu rutina?": "How would you describe your routine?",
-    "¿Quieres un aviso diario para tus hábitos?": "Do you want a daily reminder for your habits?",
-    "Puedes cambiar todo esto después en Configuración y Perfil.": "You can change all of this later in Settings and Profile.",
-    "Esto cambia qué aparece primero en Hoy. Puedes cambiarlo después en Perfil.": "This changes what appears first in Today. You can change it later in Profile.",
-    "🔥 Racha más larga": "🔥 Longest streak",
-    "✅ Hábitos cumplidos este mes": "✅ Habits completed this month",
-    "📌 Tareas terminadas": "📌 Tasks completed",
-    "📅 Días activos este mes": "📅 Active days this month",
-    "Hoy es": "Today is", "Semana del": "Week of", "Mes anterior": "Previous month", "Mes siguiente": "Next month"
-  };
-  let lang = settings.lang || "es";
-  const MESES_EN = ["january","february","march","april","may","june","july","august","september","october","november","december"];
-  const DOW_EN = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-  const MESES_T = () => (lang === "en" ? MESES_EN : MESES);
-  const DOW_T = () => (lang === "en" ? DOW_EN : DOW);
-  const localeTag = () => (lang === "en" ? "en-US" : "es-MX");
+  // ---------- Idioma: solo español ----------
+  const lang = "es";
+  const MESES_T = () => MESES;
+  const DOW_T = () => DOW;
+  const localeTag = () => "es-MX";
   function greetingWord(hr) {
-    if (lang === "en") return hr < 12 ? "Good morning" : hr < 19 ? "Good afternoon" : "Good evening";
     return hr < 12 ? "Buenos días" : hr < 19 ? "Buenas tardes" : "Buenas noches";
   }
-  const ORIG = new Map(); // nodo de texto -> texto original en español
-
-  function translateTextNode(n) {
-    if (!ORIG.has(n)) ORIG.set(n, n.nodeValue);
-    const orig = ORIG.get(n);
-    if (lang !== "en") { n.nodeValue = orig; return; }
-    const key = orig.trim();
-    const out = (key && EN[key] !== undefined) ? orig.replace(key, EN[key]) : orig;
-    n.nodeValue = out
-      .replace(/(\d+) días/g, "$1 days")
-      .replace(/(\d+) día\b/g, "$1 day")
-      .replace(/Tienes (\d+) (hábitos|hábito) pendientes? para hoy\./, (m, c) => "You have " + c + " pending habit" + (c === "1" ? "" : "s") + " for today.");
-  }
-  function translateTree(root) {
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const nodes = [];
-    while (walker.nextNode()) nodes.push(walker.currentNode);
-    nodes.forEach(n => {
-      const tag = n.parentNode && n.parentNode.nodeName;
-      if (tag === "SCRIPT" || tag === "STYLE") return;
-      translateTextNode(n);
-    });
-    root.querySelectorAll && root.querySelectorAll("[placeholder]").forEach(el => {
-      if (!ORIG.has(el)) ORIG.set(el, el.getAttribute("placeholder"));
-      const orig = ORIG.get(el);
-      const key = orig.trim();
-      el.setAttribute("placeholder", lang === "en" && EN[key] !== undefined ? EN[key] : orig);
-    });
-  }
-
-  function applyLang() {
-    document.documentElement.lang = lang === "en" ? "en" : "es";
-    translateTree(document.body);
-    document.querySelectorAll("#setLang button").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
-    if (window.__ovReady) {
-      renderCalendar(); renderTasks(); renderNotes(); renderHabitList(); renderToday(); renderHabitWeek();
-    }
-  }
-  function setLanguage(v) {
-    lang = v;
-    settings.lang = v;
-    saveSettings();
-    applyLang();
-  }
-  document.querySelectorAll("#setLang button").forEach(b => b.onclick = () => setLanguage(b.dataset.lang));
-
-  // Los textos que se crean después (avisos, menús, bienvenida) también se traducen
-  new MutationObserver(records => {
-    if (lang !== "en") return;
-    records.forEach(r => r.addedNodes.forEach(node => {
-      if (node.nodeType === 3) translateTextNode(node);
-      else if (node.nodeType === 1) translateTree(node);
-    }));
-  }).observe(document.body, { childList: true, subtree: true });
-
-  applyLang();
 
   // ---------- Perfil y personalización ----------
   const PROFILE_KEY = "ov-profile";
   const SWATCHES = [
-    "#c9b8ff", // lavanda
-    "#a8e6cf", // menta
-    "#ffd6a5", // durazno
-    "#ffadad", // coral
-    "#9ad0ff", // cielo
-    "#ffe08a", // amarillo suave
-    "#f5a3d6", // rosa
-    "#7cdcd0", // turquesa
-    "#b5e48c", // lima
-    "#ffb38a"  // mandarina
+    "#9281f7", // violeta
+    "#baa7ff", // lavanda
+    "#3b9eff", // azul
+    "#70b8ff", // cielo
+    "#3ad389", // verde
+    "#ffca16", // ámbar
+    "#ff9592", // coral
+    "#ff6465", // rojo
+    "#f0f0f0"  // blanco apagado
   ];
-  let profile = { name: "", accent: "#c9b8ff", photo: "", motto: "", birthday: "", role: "", goals: [], goalsMonth: "", share: { photo: true, stats: true }, onboarded: false };
+  let profile = { name: "", accent: "#9281f7", photo: "", motto: "", birthday: "", role: "", goals: [], goalsMonth: "", share: { photo: true, stats: true }, onboarded: false };
   try {
     profile = Object.assign(profile, JSON.parse(localStorage.getItem(PROFILE_KEY)) || {});
   } catch (e) { /* perfil por defecto */ }
@@ -2632,7 +2362,7 @@
     }, 500);
   }
 
-  const PROFILE_BLANK = { name: "", accent: "#c9b8ff", photo: "", motto: "", birthday: "", role: "", goals: [], goalsMonth: "", share: { photo: true, stats: true }, onboarded: false };
+  const PROFILE_BLANK = { name: "", accent: "#9281f7", photo: "", motto: "", birthday: "", role: "", goals: [], goalsMonth: "", share: { photo: true, stats: true }, onboarded: false };
   function hasProfileData(p) {
     return !!(p && (p.name || p.photo || p.motto || p.birthday || p.role || (p.goals && p.goals.length)));
   }
@@ -2815,23 +2545,7 @@
       box.textContent = initials(profile.name) || "🙂";
     }
   }
-  document.getElementById("pCopy").onclick = () => {
-    if (!profile.code) return;
-    try { navigator.clipboard.writeText(profile.code); } catch (e) {}
-    const b = document.getElementById("pCopy");
-    b.textContent = "Copiado";
-    setTimeout(() => { b.textContent = "Copiar"; }, 1500);
-  };
-  document.getElementById("shPhoto").onchange = e => {
-    profile.share = { ...profile.share, photo: e.target.checked }; saveProfile();
-  };
-  document.getElementById("shStats").onchange = e => {
-    profile.share = { ...profile.share, stats: e.target.checked }; saveProfile();
-  };
   function renderProfileExtras() {
-    document.getElementById("pCode").textContent = profile.code || "—";
-    document.getElementById("shPhoto").checked = !(profile.share && profile.share.photo === false);
-    document.getElementById("shStats").checked = !(profile.share && profile.share.stats === false);
     ensureGoals();
     document.getElementById("pMotto").value = profile.motto || "";
     document.getElementById("pBirthday").value = profile.birthday || "";
@@ -2889,148 +2603,6 @@
     order.forEach(k => today.appendChild(secs[k]));
   }
 
-  // ---------- Amigos ----------
-  async function friendsApi(path, body) {
-    const res = await fetch("/api/" + path, {
-      method: body ? "POST" : "GET",
-      headers: authHeaders(),
-      body: body ? JSON.stringify(body) : undefined
-    });
-    const json = await res.json().catch(() => ({}));
-    return { ok: res.ok, status: res.status, body: json };
-  }
-  function friendCard(c, actions) {
-    const el = document.createElement("div");
-    el.className = "fcard";
-    const av = document.createElement("div");
-    av.className = "fav";
-    if (c.photo) {
-      const im = document.createElement("img");
-      im.src = c.photo; im.alt = "";
-      av.appendChild(im);
-    } else {
-      av.textContent = initials(c.name) || "🙂";
-    }
-    const info = document.createElement("div");
-    info.className = "finfo";
-    const n = document.createElement("div");
-    n.className = "fname";
-    n.textContent = c.name || "Sin nombre";
-    const code = document.createElement("div");
-    code.className = "fcode";
-    code.textContent = c.code || "";
-    info.appendChild(n); info.appendChild(code);
-    el.appendChild(av); el.appendChild(info);
-    if (actions) el.appendChild(actions);
-    return el;
-  }
-  function fillList(id, items, emptyText, build) {
-    const box = document.getElementById(id);
-    box.innerHTML = "";
-    if (!items.length) {
-      const p = document.createElement("p");
-      p.className = "sub"; p.style.margin = "0";
-      p.textContent = emptyText;
-      box.appendChild(p);
-      return;
-    }
-    items.forEach(it => box.appendChild(build(it)));
-  }
-  function btn(text, cls, onClick) {
-    const b = document.createElement("button");
-    b.textContent = text;
-    if (cls) b.className = cls;
-    b.onclick = onClick;
-    return b;
-  }
-  function actionsBox(...buttons) {
-    const d = document.createElement("div");
-    d.className = "factions";
-    buttons.forEach(b => d.appendChild(b));
-    return d;
-  }
-
-  async function loadFriends() {
-    const r = await friendsApi("friends");
-    if (!r.ok) return;
-    const d = r.body;
-    fillList("fRequests", d.requests, "No tienes solicitudes pendientes.", c =>
-      friendCard(c, actionsBox(
-        btn("Aceptar", "primary", async () => { await friendsApi("friends/accept", { fromId: c.id }); loadFriends(); }),
-        btn("Rechazar", "", async () => {
-          if (!(await askConfirm('¿Rechazar la solicitud de "' + (c.name || "esta persona") + '"?'))) return;
-          await friendsApi("friends/decline", { fromId: c.id }); loadFriends();
-        })
-      )));
-    fillList("fOutgoing", d.outgoing, "No has enviado solicitudes.", c =>
-      friendCard(c, actionsBox(
-        btn("Cancelar", "", async () => { await friendsApi("friends/cancel", { toId: c.id }); loadFriends(); })
-      )));
-    fillList("fFriends", d.friends, "Aún no tienes amigos. Agrega a alguien con su código.", c =>
-      friendCard(c, actionsBox(btn("Ver perfil", "", () => openFriend(c)))));
-  }
-
-  async function openFriend(card) {
-    const r = await friendsApi("friend-stats?id=" + encodeURIComponent(card.id));
-    const box = document.getElementById("fDetail");
-    box.style.display = "";
-    box.innerHTML = "";
-    box.appendChild(friendCard(card, null));
-    const note = document.createElement("p");
-    note.className = "sub"; note.style.margin = "12px 0 0";
-    if (!r.ok) {
-      note.textContent = (r.body && r.body.error) || "No se pudo cargar el perfil.";
-      box.appendChild(note);
-      return;
-    }
-    if (r.body.hidden) {
-      note.textContent = "Esta persona decidió no compartir sus estadísticas.";
-      box.appendChild(note);
-    } else {
-      const s = r.body.stats || { longest: 0, habitsMonth: 0, tasksDone: 0, activeDays: 0 };
-      const grid = document.createElement("div");
-      grid.className = "stats";
-      grid.style.marginTop = "14px";
-      [
-        ["🔥 Racha más larga", s.longest + (s.longest === 1 ? " día" : " días")],
-        ["✅ Hábitos cumplidos este mes", String(s.habitsMonth)],
-        ["📌 Tareas terminadas", String(s.tasksDone)],
-        ["📅 Días activos este mes", String(s.activeDays)]
-      ].forEach(([label, value]) => {
-        const c = document.createElement("div");
-        c.className = "stat";
-        const l = document.createElement("div"); l.className = "sl"; l.textContent = label;
-        const v = document.createElement("div"); v.className = "sv"; v.textContent = value;
-        c.appendChild(l); c.appendChild(v);
-        grid.appendChild(c);
-      });
-      box.appendChild(grid);
-    }
-    const rm = btn("Eliminar amigo", "", async () => {
-      if (!(await askConfirm('¿Eliminar a "' + (card.name || "esta persona") + '" de tus amigos?'))) return;
-      await friendsApi("friends/remove", { friendId: card.id });
-      box.style.display = "none";
-      loadFriends();
-    });
-    rm.style.marginTop = "14px";
-    box.appendChild(rm);
-  }
-
-  document.getElementById("fAddBtn").onclick = async () => {
-    const input = document.getElementById("fAdd");
-    const msg = document.getElementById("fMsg");
-    const target = input.value.trim();
-    if (!target) return;
-    msg.textContent = "Enviando…";
-    const r = await friendsApi("friends/request", { target });
-    msg.textContent = r.ok ? (r.body.message || "") : (r.body.error || "No se pudo enviar.");
-    if (r.ok) input.value = "";
-    loadFriends();
-  };
-  document.getElementById("fAdd").addEventListener("keydown", e => {
-    if (e.key === "Enter") document.getElementById("fAddBtn").click();
-  });
-
   function updatePreview() {
     updateBubble();
     const now = new Date();
@@ -3050,61 +2622,48 @@
   renderSwatches();
   updatePreview();
 
-  // Ajustes en celular: recuerda desde qué sección se abrió para regresar a ella
-  let returnView = null;
-  // Guarda la sección de origen, salvo cuando se viene de Ajustes o Perfil (así no se pierde)
-  function rememberFrom(from) {
-    if (from === "settings" || from === "profile") return;
-    returnView = from;
-  }
-  function showSettingsScreen(from) {
-    rememberFrom(from);
-    document.body.classList.remove("m-home");
-    document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-    views.forEach(v => v.classList.toggle("active", v.id === "settings"));
-  }
-  document.getElementById("openSettings").onclick = () => showSettingsScreen(null);
-  document.getElementById("mGear").onclick = () => {
-    const cur = document.querySelector(".view.active");
-    showSettingsScreen(cur ? cur.id : null);
-  };
-  document.getElementById("mBack").onclick = () => {
-    const inSub = document.querySelector("#settings.active, #profile.active");
-    if (inSub && returnView) {
-      views.forEach(v => v.classList.toggle("active", v.id === returnView));
-      document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.view === returnView));
-      if (returnView === "today") renderToday();
-      if (returnView === "habits") renderHabitWeek();
-      if (returnView === "friends") loadFriends();
-      if (returnView === "calendar") renderCalendar();
-    } else {
-      document.body.classList.add("m-home");
-    }
-    returnView = null;
-  };
-  function showProfileScreen(from) {
-    rememberFrom(from);
-    document.body.classList.remove("m-home");
-    document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-    views.forEach(v => v.classList.toggle("active", v.id === "profile"));
-    renderProfileExtras();
-  }
-  document.getElementById("mProf").onclick = () => {
-    const cur = document.querySelector(".view.active");
-    showProfileScreen(cur ? cur.id : null);
-  };
-  document.getElementById("mProfHome").onclick = () => showProfileScreen(null);
   boot();
 
   // ---------- Celular: regreso dentro de la app y confirmación al salir ----------
   const isMobile = () => window.matchMedia("(max-width: 600px)").matches;
+  // Marcador que se desliza hasta la opción activa, pasando por las demás
+  function placeNavInd(nav, instant) {
+    let ind = nav.querySelector(":scope > .nav-ind");
+    if (!ind) {
+      ind = document.createElement("span"); ind.className = "nav-ind"; nav.appendChild(ind);
+      ind.addEventListener("transitionend", e => { if (e.propertyName === "transform") ind.classList.remove("moving"); });
+    }
+    const a = nav.querySelector("button.active");
+    if (!a || !a.offsetWidth) { ind.style.opacity = "0"; return; }
+    if (instant) ind.style.transition = "none";
+    ind.style.opacity = "1";
+    const moved = ind.dataset.x !== undefined && (ind.dataset.x !== String(a.offsetLeft) || ind.dataset.y !== String(a.offsetTop));
+    ind.dataset.x = a.offsetLeft; ind.dataset.y = a.offsetTop;
+    if (moved && !instant) ind.classList.add("moving");
+    ind.style.transform = "translate(" + a.offsetLeft + "px, " + a.offsetTop + "px)";
+    ind.style.width = a.offsetWidth + "px"; ind.style.height = a.offsetHeight + "px";
+    if (instant) { void ind.offsetWidth; ind.style.transition = ""; ind.classList.remove("moving"); }
+  }
+  function syncNavs(instant) { document.querySelectorAll(".nav, .nav-fit").forEach(n => placeNavInd(n, instant)); }
+  new MutationObserver(() => syncNavs(false)).observe(document.querySelector("aside"), { subtree: true, attributes: true, attributeFilter: ["class"] });
+  window.addEventListener("resize", () => syncNavs(true));
+  syncNavs(true);
+
+  // Fit funciona como otra app: oculta el menú de la organización y la marca cambia a Fit
+  function setFit(on) {
+    document.body.classList.toggle("in-fit", on);
+    document.querySelector(".brand").textContent = on ? "Fit" : "Mi organización";
+    document.getElementById("goFit").textContent = on ? "Mi organización" : "Fit";
+    if (on && window.openFit) window.openFit();
+    syncNavs(true);
+  }
   function goScreen(id, push) {
     document.body.classList.remove("m-home");
+    setFit(id === "gym");
     document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.view === id));
     views.forEach(v => v.classList.toggle("active", v.id === id));
     if (id === "today") renderToday();
     if (id === "habits") renderHabitWeek();
-    if (id === "friends") loadFriends();
     if (id === "calendar") renderCalendar();
     if (id === "profile") renderProfileExtras();
     if (push && isMobile()) history.pushState({ ov: "view", id }, "");
@@ -3142,12 +2701,422 @@
       });
     }
   });
+  // ---------- Fit (dentro de la misma app) ----------
+  {
+    const pad = n => String(n).padStart(2, "0");
+    const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  // ---------- Gimnasio ----------
+  let gymTab = "summary";
+  let gymPickId = "";
+  let gymProgEx = "";
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const todayIso = () => iso(new Date());
+
+  function renderGym() {
+    document.querySelectorAll(".nav-fit button").forEach(b => b.classList.toggle("active", b.dataset.tab === gymTab));
+    const body = document.getElementById("gymBody");
+    body.innerHTML = "";
+    const views = { summary: gymSummary, train: gymTrain, routines: gymRoutines, progress: gymProgress, measures: gymMeasures, food: gymFood };
+    views[gymTab](body);
+  }
+
+  // Gráfica de líneas en SVG para una lista de puntos {x: fecha, y: valor}
+  function lineChart(pts, unit) {
+    const W = 640, H = 220, P = 36;
+    const ys = pts.map(p => p.y), min = Math.min(...ys), max = Math.max(...ys), span = max - min || 1;
+    const x = i => pts.length === 1 ? W / 2 : P + i * (W - 2 * P) / (pts.length - 1);
+    const y = v => H - P - ((v - min) / span) * (H - 2 * P);
+    const line = pts.map((p, i) => x(i).toFixed(1) + "," + y(p.y).toFixed(1)).join(" ");
+    const dots = pts.map((p, i) => '<circle cx="' + x(i).toFixed(1) + '" cy="' + y(p.y).toFixed(1) + '" r="4" fill="var(--pc)"><title>' + esc(p.x) + ": " + p.y + " " + unit + "</title></circle>").join("");
+    return '<svg viewBox="0 0 ' + W + " " + H + '" width="100%" role="img" aria-label="Gráfica" style="max-width:720px">'
+      + '<line x1="' + P + '" y1="' + (H - P) + '" x2="' + (W - P) + '" y2="' + (H - P) + '" stroke="var(--line)"/>'
+      + '<polyline points="' + line + '" fill="none" stroke="var(--pc)" stroke-width="2"/>' + dots
+      + '<text x="' + P + '" y="' + (P - 12) + '" fill="var(--muted)" font-size="12">' + max + " " + unit + "</text>"
+      + '<text x="' + P + '" y="' + (H - 8) + '" fill="var(--muted)" font-size="12">' + esc(pts[0].x) + "</text>"
+      + '<text x="' + (W - P) + '" y="' + (H - 8) + '" fill="var(--muted)" font-size="12" text-anchor="end">' + esc(pts[pts.length - 1].x) + "</text></svg>";
+  }
+
+  // Resumen de Fit: lo más importante de hoy, como la vista Hoy de la organización
+  // Comidas: registro rápido de alimentos por día (kcal y macros opcionales)
+  let foodDay = todayIso();
+  const foodOpen = {};
+  // Valores aproximados por porción; el usuario puede corregirlos al agregar
+  const DEFAULT_FOODS = [
+    { name: "Huevo", kcal: 70, p: 6, c: 0.6, g: 5 },
+    { name: "Tortilla de maíz", kcal: 60, p: 1.5, c: 12, g: 0.8 },
+    { name: "Tortilla de harina", kcal: 120, p: 3, c: 20, g: 3 },
+    { name: "Pechuga de pollo (100 g)", kcal: 165, p: 31, c: 0, g: 3.6 },
+    { name: "Arroz cocido (100 g)", kcal: 130, p: 2.7, c: 28, g: 0.3 },
+    { name: "Pan integral (rebanada)", kcal: 80, p: 4, c: 14, g: 1 },
+    { name: "Plátano", kcal: 105, p: 1.3, c: 27, g: 0.4 },
+    { name: "Manzana", kcal: 95, p: 0.5, c: 25, g: 0.3 },
+    { name: "Leche entera (1 taza)", kcal: 150, p: 8, c: 12, g: 8 },
+    { name: "Avena (50 g)", kcal: 190, p: 7, c: 33, g: 3.5 }
+  ];
+  const userFoods = () => (data.meals || []).filter(m => m.meal === "preset");
+  const allFoods = () => [...userFoods(), ...DEFAULT_FOODS];
+  let foodRefocus = null;
+  const MEALS = [["desayuno", "Desayuno"], ["almuerzo", "Almuerzo"], ["comida", "Comida"], ["cena", "Cena"], ["snack", "Snacks"]];
+  function gymFood(box) {
+    const meals = (data.meals || []).filter(m => m.date === foodDay);
+    const sum = k => meals.reduce((t, m) => t + (+m[k] || 0), 0);
+    const fmt = n => Math.round(n * 10) / 10;
+    box.innerHTML = '<div class="toolbar" style="margin-bottom:14px"><input type="date" id="foodDate" value="' + foodDay + '"><button id="foodToday">Hoy</button></div>'
+      + '<div class="stats">'
+      + '<div class="stat"><div class="sl">Kcal</div><div class="sv">' + Math.round(sum("kcal")) + "</div></div>"
+      + '<div class="stat"><div class="sl">Proteína</div><div class="sv">' + fmt(sum("p")) + " g</div></div>"
+      + '<div class="stat"><div class="sl">Carbs</div><div class="sv">' + fmt(sum("c")) + " g</div></div>"
+      + '<div class="stat"><div class="sl">Grasa</div><div class="sv">' + fmt(sum("g")) + " g</div></div>"
+      + "</div>";
+    // Medidor de kcal: medio círculo; verde dentro de la meta (90–110 %), rojo si te pasas o te quedas corto
+    const goalRec = (data.meals || []).find(m => m.meal === "goal");
+    const goal = goalRec && +goalRec.kcal > 0 ? +goalRec.kcal : 2000;
+    const eaten = sum("kcal");
+    const ratio = eaten / goal;
+    const inZone = ratio >= 0.9 && ratio <= 1.1;
+    const color = inZone ? "#3ad389" : "#ff6465";
+    const arcPath = (f1, f2) => {
+      const pt = f => { const a = Math.PI * (1 - f); return [(100 + 80 * Math.cos(a)).toFixed(2), (100 - 80 * Math.sin(a)).toFixed(2)]; };
+      const [x1, y1] = pt(f1), [x2, y2] = pt(f2);
+      return "M" + x1 + " " + y1 + " A80 80 0 0 1 " + x2 + " " + y2;
+    };
+    const scaleMax = goal * 2; // la meta cae justo en el centro del arco
+    const f = Math.min(1, eaten / scaleMax);
+    const hour = new Date().getHours();
+    const nextMeal = hour < 11 ? "Toca desayunar" : hour < 16 ? "Toca comer" : hour < 19 ? "Toca un snack" : "Toca cenar";
+    const status = eaten === 0 ? nextMeal : inZone ? "Vas bien con tu meta" : ratio < 0.9 ? "Vas por debajo de tu meta" : "Vas por encima de tu meta";
+    // Degradado: verde en la meta (±10 %), amarillo a ±25 %, rojo desde ±50 %
+    const mix = (c1, c2, t) => {
+      const p = h => [1, 3, 5].map(i => parseInt(h.substr(i, 2), 16));
+      const A = p(c1), B = p(c2);
+      return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, "0")).join("");
+    };
+    const gaugeColor = dev => {
+      if (dev <= 0.1) return "#3ad389";
+      if (dev <= 0.25) return mix("#3ad389", "#ffca16", (dev - 0.1) / 0.15);
+      if (dev <= 0.5) return mix("#ffca16", "#ff6465", (dev - 0.25) / 0.25);
+      return "#ff6465";
+    };
+    let track = "";
+    const SEG = 60;
+    for (let i = 0; i < SEG; i++) {
+      const f1 = i / SEG, f2 = Math.min(1, (i + 1) / SEG + 0.004), mid = (i + 0.5) / SEG;
+      const col = gaugeColor(Math.abs(mid * 2 - 1));
+      track += '<path d="' + arcPath(f1, f2) + '" stroke="' + (mid <= f ? col : "#3ad389") + '" stroke-opacity="' + (mid <= f ? 1 : 0.18) + '" stroke-width="14" fill="none"/>';
+    }
+    const gaugeHtml = '<div class="prof-card" style="margin-bottom:14px;text-align:center">'
+      + '<svg viewBox="0 0 200 118" width="100%" style="max-width:280px;display:block;margin:0 auto">'
+      + track
+      + '<text x="100" y="92" text-anchor="middle" font-size="24" font-weight="600" fill="currentColor">' + Math.round(eaten) + "</text>"
+      + '<text x="100" y="110" text-anchor="middle" font-size="10" fill="currentColor" opacity=".6">de ' + Math.round(goal) + " kcal</text></svg>"
+      + '<div class="sdesc" style="margin-top:6px;color:' + (inZone ? "#3ad389" : "var(--muted)") + '">' + esc(status) + "</div>"
+      + '<div class="gex-head" style="margin-top:12px;justify-content:center"><span class="sdesc">Meta de kcal</span><input type="number" min="500" step="50" id="foodGoal" value="' + Math.round(goal) + '" style="width:110px"></div>'
+      + "</div>";
+    box.querySelector(".stats").insertAdjacentHTML("beforebegin", gaugeHtml);
+    box.querySelector("#foodGoal").onchange = e => {
+      const v = Math.max(500, Math.round(+e.target.value || 2000));
+      if (goalRec) goalRec.kcal = v;
+      else data.meals = [...(data.meals || []), { id: "goal", date: "meta", meal: "goal", kcal: v }];
+      save(); renderGym();
+    };
+    MEALS.forEach(([key, label]) => {
+      const items = meals.filter(m => m.meal === key);
+      const open = foodOpen[key] !== undefined ? foodOpen[key] : items.length > 0;
+      const kcal = Math.round(items.reduce((t, m) => t + (+m.kcal || 0), 0));
+      const card = document.createElement("div");
+      card.className = "prof-card"; card.style.marginTop = "14px";
+      card.innerHTML = '<div class="gex-head"><div><div class="slabel">' + label + '</div><div class="sdesc">' + items.length + (items.length === 1 ? " alimento" : " alimentos") + " · " + kcal + ' kcal</div></div>'
+        + '<button class="ghost" data-toggle="' + key + '" aria-label="' + (open ? "Contraer" : "Expandir") + '">' + (open ? "▴" : "▾") + "</button></div>"
+        + (open
+          ? items.map(m => '<div class="gfood-row"><div><div>' + esc(m.name) + '</div><div class="sdesc">' + Math.round(+m.kcal || 0) + ' kcal</div></div><button class="ghost" data-del="' + esc(m.id) + '">Quitar</button></div>').join("")
+            + '<div class="gfood" data-add="' + key + '"><input class="gname-f" list="foodList" maxlength="40" placeholder="Alimento"><input class="fk" type="number" min="0" placeholder="kcal"><input class="fp" type="number" min="0" step="0.1" placeholder="P"><input class="fc" type="number" min="0" step="0.1" placeholder="C"><input class="fg" type="number" min="0" step="0.1" placeholder="G"><button class="gadd-btn">+ Agregar</button></div>'
+          : "");
+      card.querySelector("[data-toggle]").onclick = () => { foodOpen[key] = !open; renderGym(); };
+      if (open) {
+        const nameIn = card.querySelector(".gname-f"), kcalIn = card.querySelector(".fk");
+        const pIn = card.querySelector(".fp"), cIn = card.querySelector(".fc"), gIn = card.querySelector(".fg");
+        const fillFromFood = () => {
+          const hit = allFoods().find(f => f.name.toLowerCase() === nameIn.value.trim().toLowerCase());
+          if (!hit) return;
+          kcalIn.value = hit.kcal; pIn.value = hit.p; cIn.value = hit.c; gIn.value = hit.g;
+        };
+        nameIn.addEventListener("input", fillFromFood);
+        nameIn.addEventListener("change", fillFromFood);
+        const addOne = () => {
+          const name = nameIn.value.trim();
+          if (!name) { toast("Escribe el alimento."); nameIn.focus(); return; }
+          data.meals = [...(data.meals || []), { id: uid(), date: foodDay, meal: key, name: name.slice(0, 40), kcal: +kcalIn.value || 0, p: +pIn.value || 0, c: +cIn.value || 0, g: +gIn.value || 0 }];
+          foodRefocus = key; save(); renderGym();
+        };
+        card.querySelector(".gadd-btn").onclick = addOne;
+        [nameIn, kcalIn, pIn, cIn, gIn].forEach(i => i.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addOne(); } }));
+        card.querySelectorAll("[data-del]").forEach(b => b.onclick = () => {
+          data.meals = (data.meals || []).filter(m => m.id !== b.dataset.del); save(); renderGym();
+        });
+      }
+      box.appendChild(card);
+    });
+    const presetCard = document.createElement("div");
+    presetCard.className = "prof-card"; presetCard.style.marginTop = "14px";
+    presetCard.innerHTML = '<div class="slabel">Comidas predeterminadas</div><div class="sdesc">Guarda tus alimentos frecuentes para elegirlos al escribir.</div>'
+      + userFoods().map(m => '<div class="gfood-row"><div><div>' + esc(m.name) + '</div><div class="sdesc">' + Math.round(+m.kcal || 0) + " kcal · P " + (+m.p || 0) + " · C " + (+m.c || 0) + " · G " + (+m.g || 0) + '</div></div><button class="ghost" data-pdel="' + esc(m.id) + '">Quitar</button></div>').join("")
+      + '<div class="gfood"><input class="pre-name" maxlength="40" placeholder="Nombre"><input class="pre-k" type="number" min="0" placeholder="kcal"><input class="pre-p" type="number" min="0" step="0.1" placeholder="P"><input class="pre-c" type="number" min="0" step="0.1" placeholder="C"><input class="pre-g" type="number" min="0" step="0.1" placeholder="G"><button class="gadd-btn">+ Guardar</button></div>';
+    presetCard.querySelector(".gadd-btn").onclick = () => {
+      const name = presetCard.querySelector(".pre-name").value.trim();
+      if (!name) { toast("Escribe el nombre del alimento."); return; }
+      const v = sel => +presetCard.querySelector(sel).value || 0;
+      data.meals = [...(data.meals || []), { id: uid(), date: "meta", meal: "preset", name: name.slice(0, 40), kcal: v(".pre-k"), p: v(".pre-p"), c: v(".pre-c"), g: v(".pre-g") }];
+      save(); renderGym();
+    };
+    presetCard.querySelectorAll("[data-pdel]").forEach(b => b.onclick = () => {
+      data.meals = (data.meals || []).filter(m => m.id !== b.dataset.pdel); save(); renderGym();
+    });
+    box.appendChild(presetCard);
+    box.insertAdjacentHTML("beforeend", '<datalist id="foodList">' + allFoods().map(f => '<option value="' + esc(f.name) + '"></option>').join("") + "</datalist>");
+    if (foodRefocus) {
+      const el = box.querySelector('[data-add="' + foodRefocus + '"] .gname-f');
+      foodRefocus = null;
+      if (el) el.focus();
+    }
+    box.querySelector("#foodDate").onchange = e => { foodDay = e.target.value || todayIso(); renderGym(); };
+    box.querySelector("#foodToday").onclick = () => { foodDay = todayIso(); renderGym(); };
+  }
+
+  function gymSummary(box) {
+    const today = todayIso();
+    const routines = data.routines || [];
+    const workouts = data.workouts || [];
+    const todayW = workouts.find(w => w.date === today);
+    const todays = routines.filter(r => (r.days || []).includes(new Date().getDay()));
+    const weekAgo = iso(new Date(Date.now() - 6 * 864e5));
+    const week = workouts.filter(w => w.date >= weekAgo && w.date <= today).length;
+    const lastM = [...(data.measures || [])].filter(m => m.weight).sort((a, b) => a.date.localeCompare(b.date)).pop();
+    let todayText = "Sin entreno hoy";
+    if (!routines.length) todayText = "Crea una rutina en Rutinas";
+    else if (!todayW && todays.length) todayText = "Toca: " + todays.map(r => r.name).join(", ");
+    else if (todayW) {
+      const all = todayW.exercises.flatMap(e => e.sets);
+      todayText = todayW.routineName + " · " + all.filter(s => s.done).length + " de " + all.length + " series";
+    }
+    // Racha: días seguidos con entreno, contando hasta hoy (si hoy aún no, desde ayer)
+    const doneDays = new Set(workouts.map(w => w.date));
+    const cursor = new Date();
+    if (!doneDays.has(today)) cursor.setDate(cursor.getDate() - 1);
+    let streak = 0;
+    while (doneDays.has(iso(cursor))) { streak++; cursor.setDate(cursor.getDate() - 1); }
+
+    const quick = todays.length
+      ? todays.map(r => {
+          const d = workouts.find(w => w.date === today && w.routineId === r.id);
+          const lines = r.exercises.map(ex => '<div class="sdesc">' + esc(ex.name) + " · " + (+ex.sets || 1) + " × " + esc(String(ex.reps || "—")) + "</div>").join("");
+          return '<div class="quick-row"><div><div class="slabel">' + esc(r.name) + '</div>' + lines + '</div>'
+            + (d ? '<button class="primary" data-undo="' + esc(d.id) + '">✓ Hecho · deshacer</button>'
+                 : '<button class="primary" data-quick="' + esc(r.id) + '">Hecho</button>') + "</div>";
+        }).join("")
+      : '<div class="sdesc">Hoy no hay rutina programada.</div>';
+
+    box.innerHTML = '<div class="stats">'
+      + '<div class="stat"><div class="sl">Entreno de hoy</div><div class="sv" style="font-size:18px">' + esc(todayText) + "</div></div>"
+      + '<div class="stat"><div class="sl">Entrenos esta semana</div><div class="sv">' + week + "</div></div>"
+      + '<div class="stat"><div class="sl">Último peso</div><div class="sv">' + (lastM ? esc(lastM.weight) + " kg" : "—") + '</div><div class="sdesc">' + (lastM ? esc(lastM.date) : "") + "</div></div>"
+      + '<div class="stat"><div class="sl">Rutinas</div><div class="sv">' + routines.length + "</div></div>"
+      + "</div>"
+      + '<div class="prof-card" style="margin-top:18px"><div class="gex-head"><div class="slabel">Rutina de hoy</div><div class="sdesc">Racha: ' + streak + (streak === 1 ? " día" : " días") + "</div></div>" + quick + "</div>"
+      + '<div class="toolbar" style="margin-top:18px"><button class="primary" id="gsGo">' + (todayW ? "Seguir entreno" : "Ir a entrenar") + '</button><button id="gsMeasure">Registrar medida</button></div>';
+    box.querySelectorAll("[data-quick]").forEach(b => b.onclick = () => {
+      const r = routines.find(x => x.id === b.dataset.quick);
+      data.workouts = [...workouts, {
+        id: uid(), date: today, routineId: r.id, routineName: r.name,
+        exercises: r.exercises.map(ex => ({
+          name: ex.name, reps: ex.reps,
+          sets: Array.from({ length: Math.max(1, +ex.sets || 1) }, () => ({ weight: "", reps: "", done: true }))
+        }))
+      }];
+      save(); renderGym();
+    });
+    box.querySelectorAll("[data-undo]").forEach(b => b.onclick = () => {
+      data.workouts = workouts.filter(w => w.id !== b.dataset.undo); save(); renderGym();
+    });
+    box.querySelector("#gsGo").onclick = () => { gymTab = "train"; renderGym(); };
+    box.querySelector("#gsMeasure").onclick = () => { gymTab = "measures"; renderGym(); };
+  }
+
+  const DAY_NAMES = [[1, "Lun"], [2, "Mar"], [3, "Mié"], [4, "Jue"], [5, "Vie"], [6, "Sáb"], [0, "Dom"]];
+  function dayLabel(days) {
+    const names = (days || []).slice().sort((a, b) => ((a + 6) % 7) - ((b + 6) % 7))
+      .map(x => (DAY_NAMES.find(([k]) => k === x) || [])[1]).filter(Boolean);
+    return names.length ? " (" + names.join(", ") + ")" : "";
+  }
+
+  // Entrenar: elige rutina, empieza el entreno de hoy y marca series
+  function gymTrain(box) {
+    const routines = data.routines || [];
+    if (!routines.length) { box.innerHTML = '<p class="sub">Primero crea una rutina en la pestaña Rutinas.</p>'; return; }
+    const todays = routines.filter(r => (r.days || []).includes(new Date().getDay()));
+    if (!routines.some(r => r.id === gymPickId)) gymPickId = (todays[0] || routines[0]).id;
+    const routine = routines.find(r => r.id === gymPickId);
+    const log = (data.workouts || []).find(w => w.date === todayIso() && w.routineId === routine.id);
+    const note = todays.length ? "Hoy toca: " + todays.map(r => r.name).join(", ") : "Hoy no tienes rutina programada; puedes entrenar cualquiera.";
+    box.innerHTML = '<div class="prof-card"><div class="sdesc">' + esc(note) + '</div><div class="fld" style="margin-top:10px">Rutina<select id="gymPick">'
+      + routines.map(r => '<option value="' + esc(r.id) + '"' + (r.id === gymPickId ? " selected" : "") + ">" + esc(r.name) + esc(dayLabel(r.days)) + "</option>").join("")
+      + "</select></div>" + (log ? "" : '<div class="toolbar" style="margin:12px 0 0"><button class="primary" id="gymStart">Empezar entreno de hoy</button></div>') + '</div><div id="gymLog"></div>';
+    box.querySelector("#gymPick").onchange = e => { gymPickId = e.target.value; renderGym(); };
+    const start = box.querySelector("#gymStart");
+    if (start) start.onclick = () => {
+      const w = {
+        id: uid(), date: todayIso(), routineId: routine.id, routineName: routine.name,
+        exercises: routine.exercises.map(ex => ({
+          name: ex.name, reps: ex.reps,
+          sets: Array.from({ length: Math.max(1, +ex.sets || 1) }, () => ({ weight: "", reps: "", done: false }))
+        }))
+      };
+      data.workouts = [...(data.workouts || []), w]; save(); renderGym();
+    };
+    if (log) renderWorkoutLog(box.querySelector("#gymLog"), log);
+  }
+  function renderWorkoutLog(box, w) {
+    box.innerHTML = "<h2>" + esc(w.routineName) + " · hoy</h2>";
+    if (!w.exercises.length) { box.insertAdjacentHTML("beforeend", '<p class="sub">Esta rutina no tiene ejercicios.</p>'); return; }
+    w.exercises.forEach(ex => {
+      const card = document.createElement("div");
+      card.className = "prof-card";
+      card.innerHTML = '<div class="gex-head"><div><div class="slabel">' + esc(ex.name) + '</div><div class="sdesc">Meta: ' + esc(String(ex.reps || "—")) + ' repeticiones</div></div>'
+        + '<label class="chk"><input type="checkbox" class="exdone"' + (ex.sets.every(s => s.done) ? " checked" : "") + "> Hecho</label></div>";
+      card.querySelector(".exdone").onchange = e => { ex.sets.forEach(s => { s.done = e.target.checked; }); save(); renderGym(); };
+      ex.sets.forEach((s, i) => {
+        const row = document.createElement("div");
+        row.className = "gset";
+        row.innerHTML = '<span class="gnum">' + (i + 1) + '</span>'
+          + '<input type="number" inputmode="decimal" placeholder="kg" value="' + esc(s.weight) + '">'
+          + '<input type="number" inputmode="numeric" placeholder="reps" value="' + esc(s.reps) + '">'
+          + '<label class="chk"><input type="checkbox"' + (s.done ? " checked" : "") + "> Hecha</label>";
+        const [wi, ri] = row.querySelectorAll('input[type="number"]');
+        row.querySelector('input[type="checkbox"]').onchange = e => { s.done = e.target.checked; save(); };
+        wi.oninput = () => { s.weight = wi.value; save(); };
+        ri.oninput = () => { s.reps = ri.value; save(); };
+        card.appendChild(row);
+      });
+      box.appendChild(card);
+    });
+  }
+
+  // Rutinas: crear, agregar o quitar ejercicios y borrar
+  function gymRoutines(box) {
+    box.innerHTML = '<div class="prof-card"><div class="toolbar" style="margin:0"><input id="gymNewName" maxlength="40" placeholder="Nombre de la rutina (ej. Pierna)"><button class="primary" id="gymNewBtn">+ Rutina</button></div></div><div id="gymRoutineList"></div>';
+    box.querySelector("#gymNewBtn").onclick = () => {
+      const name = box.querySelector("#gymNewName").value.trim();
+      if (!name) { toast("Escribe un nombre para la rutina."); return; }
+      const r = { id: uid(), name: name.slice(0, 40), exercises: [] };
+      data.routines = [...(data.routines || []), r]; gymPickId = r.id; save(); renderGym();
+    };
+    const list = box.querySelector("#gymRoutineList");
+    (data.routines || []).forEach(r => {
+      const card = document.createElement("div");
+      card.className = "prof-card";
+      card.innerHTML = '<input class="grename" maxlength="40" value="' + esc(r.name) + '" aria-label="Nombre de la rutina">'
+        + '<div style="margin-top:8px">' + (r.exercises.map((ex, i) => '<div class="gex"><span>' + esc(ex.name) + '</span><span class="sdesc">' + ex.sets + " × " + esc(String(ex.reps)) + '</span><button class="gdel" data-i="' + i + '">Quitar</button></div>').join("") || '<div class="sdesc">Sin ejercicios todavía.</div>') + "</div>"
+        + '<div class="gadd"><input class="gname" maxlength="40" placeholder="Ejercicio"><input class="gsets" type="number" min="1" max="20" value="3" title="Series"><input class="greps" type="number" min="1" max="100" value="10" title="Repeticiones"><button class="gadd-btn">+ Agregar</button></div>'
+        + '<div class="toolbar" style="margin:12px 0 0"><button class="gdelr">Borrar rutina</button></div>';
+      const hint = document.createElement("div");
+      hint.className = "sdesc"; hint.style.margin = "10px 0 6px"; hint.textContent = "Días que entrenas";
+      const dayRow = document.createElement("div");
+      dayRow.className = "days-pick";
+      DAY_NAMES.forEach(([d, l]) => {
+        const c = document.createElement("button");
+        c.type = "button"; c.className = "chip" + ((r.days || []).includes(d) ? " on" : ""); c.textContent = l;
+        c.onclick = () => { r.days = (r.days || []).includes(d) ? r.days.filter(x => x !== d) : [...(r.days || []), d]; save(); renderGym(); };
+        dayRow.appendChild(c);
+      });
+      card.querySelector(".grename").after(hint); hint.after(dayRow);
+      card.querySelector(".grename").onchange = e => { r.name = e.target.value.trim().slice(0, 40) || r.name; save(); renderGym(); };
+      card.querySelectorAll(".gdel").forEach(b => b.onclick = () => { r.exercises.splice(+b.dataset.i, 1); save(); renderGym(); });
+      card.querySelector(".gadd-btn").onclick = () => {
+        const name = card.querySelector(".gname").value.trim();
+        if (!name) { toast("Escribe el nombre del ejercicio."); return; }
+        r.exercises.push({
+          id: uid(), name: name.slice(0, 40),
+          sets: Math.min(20, Math.max(1, +card.querySelector(".gsets").value || 1)),
+          reps: Math.min(100, Math.max(1, +card.querySelector(".greps").value || 1))
+        });
+        save(); renderGym();
+      };
+      card.querySelector(".gdelr").onclick = async () => {
+        if (!(await askConfirm('¿Borrar la rutina "' + r.name + '"? Tus entrenos guardados no se borran.'))) return;
+        data.routines = data.routines.filter(x => x.id !== r.id); save(); renderGym();
+      };
+      list.appendChild(card);
+    });
+    if (!(data.routines || []).length) list.insertAdjacentHTML("beforeend", '<p class="sub">Aún no tienes rutinas.</p>');
+  }
+
+  // Progreso: mejor peso por entreno en cada ejercicio
+  function gymProgress(box) {
+    const names = [...new Set((data.workouts || []).flatMap(w => w.exercises.map(e => e.name)))];
+    if (!names.length) { box.innerHTML = '<p class="sub">Aún no hay entrenos registrados.</p>'; return; }
+    if (!names.includes(gymProgEx)) gymProgEx = names[0];
+    box.innerHTML = '<div class="prof-card"><div class="fld">Ejercicio<select id="gymEx">'
+      + names.map(n => "<option" + (n === gymProgEx ? " selected" : "") + ">" + esc(n) + "</option>").join("")
+      + '</select></div></div><div id="gymChart"></div>';
+    box.querySelector("#gymEx").onchange = e => { gymProgEx = e.target.value; renderGym(); };
+    const pts = (data.workouts || []).map(w => {
+      const ex = w.exercises.find(e => e.name === gymProgEx);
+      if (!ex) return null;
+      const done = ex.sets.filter(s => s.done && +s.weight > 0);
+      return done.length ? { x: w.date, y: Math.max(...done.map(s => +s.weight)) } : null;
+    }).filter(Boolean).sort((a, b) => a.x.localeCompare(b.x));
+    box.querySelector("#gymChart").innerHTML = pts.length
+      ? lineChart(pts, "kg")
+      : '<p class="sub">Marca series hechas con peso para ver el avance.</p>';
+  }
+
+  // Medidas: peso y medidas del cuerpo, con gráfica de peso
+  function gymMeasures(box) {
+    const fields = [["weight", "Peso (kg)"], ["waist", "Cintura (cm)"], ["chest", "Pecho (cm)"], ["arm", "Brazo (cm)"], ["leg", "Pierna (cm)"]];
+    box.innerHTML = '<div class="prof-card"><div class="form-grid"><label class="fld">Fecha<input type="date" id="gmDate" value="' + todayIso() + '"></label>'
+      + fields.map(([k, l]) => '<label class="fld">' + l + '<input type="number" step="0.1" data-k="' + k + '"></label>').join("")
+      + '</div><div class="toolbar" style="margin:12px 0 0"><button class="primary" id="gmSave">Guardar medida</button></div></div>'
+      + '<div id="gmChart"></div><h2>Historial</h2><div id="gmList"></div>';
+    box.querySelector("#gmSave").onclick = () => {
+      const entry = { id: uid(), date: box.querySelector("#gmDate").value || todayIso() };
+      let any = false;
+      box.querySelectorAll("[data-k]").forEach(inp => {
+        const v = parseFloat(inp.value);
+        if (Number.isFinite(v) && v > 0) { entry[inp.dataset.k] = v; any = true; }
+      });
+      if (!any) { toast("Escribe al menos una medida."); return; }
+      data.measures = [...(data.measures || []), entry].sort((a, b) => a.date.localeCompare(b.date));
+      save(); renderGym();
+    };
+    const wpts = (data.measures || []).filter(m => m.weight).map(m => ({ x: m.date, y: m.weight }));
+    box.querySelector("#gmChart").innerHTML = wpts.length > 1 ? lineChart(wpts, "kg") : "";
+    const list = box.querySelector("#gmList");
+    const sorted = [...(data.measures || [])].reverse();
+    if (!sorted.length) list.innerHTML = '<p class="sub">Aún no hay medidas guardadas.</p>';
+    sorted.forEach(m => {
+      const row = document.createElement("div");
+      row.className = "gex";
+      const parts = fields.filter(([k]) => m[k]).map(([k, l]) => l.split(" (")[0] + " " + m[k]);
+      row.innerHTML = '<span>' + esc(m.date) + '</span><span class="sdesc">' + esc(parts.join(" · ") || "—") + '</span><button class="gdel">Borrar</button>';
+      row.querySelector(".gdel").onclick = async () => {
+        if (!(await askConfirm("¿Borrar la medida del " + m.date + "?"))) return;
+        data.measures = data.measures.filter(x => x.id !== m.id); save(); renderGym();
+      };
+      list.appendChild(row);
+    });
+  }
+
+    document.querySelectorAll(".nav-fit button[data-tab]").forEach(b => b.addEventListener("click", () => { gymTab = b.dataset.tab; renderGym(); }));
+    window.openFit = () => { gymTab = "summary"; renderGym(); };
+  }
+
 })();
+
 </script>
 <script>
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/sw.js");
   }
+
 </script>
 </body>
 </html>
